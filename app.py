@@ -228,11 +228,13 @@ close_data = (
 
 ma7_data = (
     df['MA7']
+    .replace({np.nan: None})
     .tolist()
 )
 
 ma30_data = (
     df['MA30']
+    .replace({np.nan: None})
     .tolist()
 )
 
