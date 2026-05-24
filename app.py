@@ -206,7 +206,7 @@ else:
 
 labels = (
     df['Date']
-    .dt.strftime('%b')
+    .dt.strftime('%b %y')
     .tolist()
 )
 
