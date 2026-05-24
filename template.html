@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Analisis Saham TLKM</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<!-- ChartJS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#050f1f;
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+    padding:18px;
+    overflow:hidden;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+    background:linear-gradient(145deg,#071424,#0b1d36);
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 0 40px rgba(0,0,0,0.45);
+}
+
+/* HEADER */
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.dashboard-title{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.dashboard-title h1{
+    font-size:28px;
+    font-weight:700;
+    margin:0;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.period-select{
+    background:#12233e;
+    border:none;
+    color:white;
+    padding:10px 15px;
+    border-radius:12px;
+}
+
+/* CARD */
+
+.card-custom{
+    background:rgba(13,25,47,0.95);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:18px;
+    padding:15px;
+    box-shadow:0 0 18px rgba(0,0,0,0.25);
+}
+
+.card-title-small{
+    color:#9fb2cc;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.big-number{
+    font-size:30px;
+    font-weight:700;
+    line-height:1;
+}
+
+.green{
+    color:#22c55e;
+}
+
+.red{
+    color:#ef4444;
+}
+
+.gray{
+    color:#94a3b8;
+}
+
+/* CHART */
+
+.chart-container{
+    height:270px;
+}
+
+.volume-container{
+    height:120px;
+}
+
+/* RIGHT SIDE */
+
+.right-side{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+/* SUMMARY */
+
+.summary-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+    font-size:14px;
+    color:#d4dce7;
+}
+
+/* GAUGE */
+
+.gauge-wrapper{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.gauge-half{
+    width:180px;
+    height:90px;
+    border-top-left-radius:180px;
+    border-top-right-radius:180px;
+    overflow:hidden;
+    position:relative;
+    background:conic-gradient(
+        from 180deg,
+        #ff3b30 0deg 60deg,
+        #ffb020 60deg 120deg,
+        #22c55e 120deg 180deg
+    );
+}
+
+.gauge-mask{
+    position:absolute;
+    width:140px;
+    height:70px;
+    background:#081321;
+    border-top-left-radius:140px;
+    border-top-right-radius:140px;
+    bottom:0;
+    left:20px;
+}
+
+.needle{
+    width:4px;
+    height:75px;
+    background:white;
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform-origin:bottom center;
+    transform:rotate(-40deg);
+    border-radius:10px;
+    z-index:10;
+}
+
+.gauge-labels{
+    width:180px;
+    display:flex;
+    justify-content:space-between;
+    margin-top:6px;
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+.gauge-info{
+    text-align:center;
+    margin-top:12px;
+}
+
+.gauge-info h3{
+    font-size:32px;
+    font-weight:bold;
+    margin:0;
+}
+
+.mini-chart{
+    height:45px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:992px){
+
+    body{
+        overflow:auto;
+    }
+
+    .dashboard-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .chart-container{
+        height:250px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+<div class="dashboard">
+
+<!-- HEADER -->
+
+<div class="dashboard-header">
+
+<div class="dashboard-title">
+
+<i class="fa-solid fa-chart-line fa-2x"></i>
+
+<h1>Dashboard Analisis Saham TLKM</h1>
+
+</div>
+
+<div class="header-right">
+
+<span class="gray">
+Realtime Market Dashboard
+</span>
+
+</div>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="row g-3">
+
+<!-- LEFT -->
+
+<div class="col-lg-9">
+
+<!-- TOP CARDS -->
+
+<div class="row g-3 mb-3">
+
+<!-- HARGA -->
+
+<div class="col-md-4">
+
+<div class="card-custom">
+
+<div class="card-title-small">
+Harga Terakhir
+</div>
+
+<div class="big-number">
+{{last_close}}
+</div>
+
+<div class="red mt-2">
+{{change}}
+</div>
+
+</div>
+
+</div>
+
+<!-- PERSENTASE -->
+
+<div class="col-md-4">
+
+<div class="card-custom">
+
+<div class="card-title-small">
+Perubahan Hari Ini
+</div>
+
+<div class="big-number green">
+{{pct}}
+</div>
+
+<div class="green mt-2">
+{{change}}
+</div>
+
+</div>
+
+</div>
+
+<!-- VOLUME -->
+
+<div class="col-md-4">
+
+<div class="card-custom">
+
+<div class="card-title-small">
+Volume
+</div>
+
+<div class="big-number">
+{{volume}}
+</div>
+
+<div class="gray mt-2">
+Saham
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PRICE CHART -->
+
+<div class="card-custom mb-3">
+
+<h5 class="mb-3">
+Pergerakan Harga Saham
+</h5>
+
+<div class="chart-container">
+
+<canvas id="priceChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- VOLUME -->
+
+<div class="card-custom">
+
+<h6 class="mb-3">
+Volume Trading
+</h6>
+
+<div class="volume-container">
+
+<canvas id="volumeChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="col-lg-3">
+
+<div class="right-side">
+
+<!-- SUMMARY -->
+
+<div class="card-custom">
+
+<h5 class="mb-3">
+Ringkasan Harga
+</h5>
+
+<div class="summary-item">
+<span>Open</span>
+<span>{{open}}</span>
+</div>
+
+<div class="summary-item">
+<span>High</span>
+<span class="green">{{high}}</span>
+</div>
+
+<div class="summary-item">
+<span>Low</span>
+<span>{{low}}</span>
+</div>
+
+<div class="summary-item">
+<span>Close</span>
+<span>{{close}}</span>
+</div>
+
+<div class="summary-item">
+<span>52W High</span>
+<span class="green">{{high52}}</span>
+</div>
+
+<div class="summary-item">
+<span>52W Low</span>
+<span class="red">{{low52}}</span>
+</div>
+
+</div>
+
+<!-- SENTIMENT -->
+
+<div class="card-custom sentiment-box">
+
+<h5 class="mb-3">
+Indikator Sentimen
+</h5>
+
+<div class="gauge-wrapper">
+
+<div class="gauge-half">
+
+<div class="gauge-fill"></div>
+
+<div class="gauge-mask"></div>
+
+<div class="needle" id="needle"></div>
+
+</div>
+
+<div class="gauge-labels">
+
+<span>-100</span>
+
+<span>0</span>
+
+<span>100</span>
+
+</div>
+
+<div class="gauge-info">
+
+<h3 id="signalText">
+{{signal}}
+</h3>
+
+<p>
+{{sentiment_score}} / 100
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- VOLATILITY -->
+
+<div class="card-custom">
+
+<h5>
+Volatilitas (30 Hari)
+</h5>
+
+<div class="big-number mt-2">
+{{volatility}}
+</div>
+
+<div class="mini-chart mt-3">
+
+<canvas id="miniChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- SOURCE -->
+
+<div class="card-custom">
+
+<h5 class="mb-3">
+Sumber Data
+</h5>
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+
+<span class="green">
+<i class="fa-solid fa-database"></i>
+</span>
+
+yfinance
+
+</div>
+
+<div class="gray">
+Realtime
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+   SIGNAL COLOR
+========================= */
+
+const signalText = document.getElementById('signalText');
+
+if(signalText.innerText === 'BUY'){
+
+    signalText.style.color = '#22c55e';
+
+}else{
+
+    signalText.style.color = '#ef4444';
+
+}
+
+/* =========================
+   PRICE CHART
+========================= */
+
+const priceChart = document.getElementById('priceChart');
+
+new Chart(priceChart, {
+
+    type:'line',
+
+    data:{
+
+        labels: {{labels}},
+
+        datasets:[
+
+            {
+                label:'Harga',
+
+                data: {{close_data}},
+
+                borderColor:'#22c55e',
+
+                tension:0.4,
+
+                borderWidth:2,
+
+                pointRadius:0
+            },
+
+            {
+                label:'MA7',
+
+                data: {{ma7_data}},
+
+                borderColor:'#3b82f6',
+
+                tension:0.4,
+
+                borderWidth:2,
+
+                pointRadius:0
+            },
+
+            {
+                label:'MA30',
+
+                data: {{ma30_data}},
+
+                borderColor:'#f59e0b',
+
+                tension:0.4,
+
+                borderWidth:2,
+
+                pointRadius:0
+            }
+
+        ]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
+                }
+            }
+        },
+
+        scales:{
+
+            x:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            },
+
+            y:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+/* =========================
+   VOLUME CHART
+========================= */
+
+const volumeChart = document.getElementById('volumeChart');
+
+new Chart(volumeChart, {
+
+    type:'bar',
+
+    data:{
+
+        labels: {{labels}},
+
+        datasets:[{
+
+            data: {{volume_data}},
+
+            backgroundColor:'#06b6d4',
+
+            borderRadius:4
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+
+        scales:{
+
+            x:{
+                display:false
+            },
+
+            y:{
+                display:false
+            }
+
+        }
+
+    }
+
+});
+
+/* =========================
+   VOLATILITY MINI CHART
+========================= */
+
+const miniChart = document.getElementById('miniChart');
+
+new Chart(miniChart, {
+
+    type:'line',
+
+    data:{
+
+        labels: {{labels}},
+
+        datasets:[{
+
+            data: {{volatility_data}},
+
+            borderColor:'#22c55e',
+
+            borderWidth:2,
+
+            tension:0.4,
+
+            pointRadius:0,
+
+            fill:false
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+
+        scales:{
+
+            x:{
+                display:false
+            },
+
+            y:{
+                display:false
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
