@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import yfinance as yf
 import pandas as pd
 import numpy as np
-
+import json
 # =========================================================
 # PAGE CONFIG
 # =========================================================
@@ -226,16 +226,15 @@ close_data = (
     .tolist()
 )
 
-ma7_data = [
-    None if pd.isna(x) else round(x,2)
-    for x in df['MA7']
-]
+html = html.replace(
+    "{{ma7_data}}",
+    json.dumps(ma7_data)
+)
 
-ma30_data = [
-    None if pd.isna(x) else round(x,2)
-    for x in df['MA30']
-]
-
+html = html.replace(
+    "{{ma30_data}}",
+    json.dumps(ma30_data)
+)
 volume_data = (
     df['Volume']
     .fillna(0)
