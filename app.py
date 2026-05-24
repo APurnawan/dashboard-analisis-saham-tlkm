@@ -4,12 +4,13 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 import json
+
 # =========================================================
 # PAGE CONFIG
 # =========================================================
 
 st.set_page_config(
-    page_title="Dashboard Analisis Saham TLKM V2",
+    page_title="Dashboard Analisis Saham TLKM",
     layout="wide"
 )
 
@@ -22,12 +23,10 @@ period_option = st.selectbox(
     "Pilih Periode",
 
     [
-
         "1 Tahun",
         "6 Bulan",
         "3 Bulan",
         "1 Bulan"
-
     ]
 
 )
@@ -47,22 +46,16 @@ selected_period = period_map[period_option]
 # LOAD DATA
 # =========================================================
 
-def load_data(period):
+df = yf.download(
 
-    df = yf.download(
+    'TLKM.JK',
 
-        'TLKM.JK',
+    period=selected_period,
 
-        period=period,
+    auto_adjust=True,
 
-        auto_adjust=True,
-
-        progress=False
-    )
-
-    return df
-
-df = load_data(selected_period)
+    progress=False
+)
 
 # =========================================================
 # FIX DATAFRAME
@@ -104,19 +97,16 @@ df['Volatility'] = (
 # METRIC ANALYSIS
 # =========================================================
 
-# Harga terakhir
 last_close = round(
     df['Close'].iloc[-1],
     2
 )
 
-# Harga awal periode
 first_close = round(
     df['Close'].iloc[0],
     2
 )
 
-# Return periode
 change_value = round(
     last_close-first_close,
     2
@@ -129,10 +119,8 @@ pct = round(
 
 change = f"{change_value} ({pct}%)"
 
-# Total volume
 volume = int(df['Volume'].sum())
 
-# Ringkasan harga
 open_price = round(
     df['Open'].iloc[0],
     2
@@ -163,7 +151,10 @@ low52 = round(
     2
 )
 
-# Volatility value
+# =========================================================
+# VOLATILITY VALUE
+# =========================================================
+
 if pd.isna(df['Volatility'].iloc[-1]):
 
     volatility = 0
@@ -192,59 +183,6 @@ else:
     sentiment_score = 25
 
 # =========================================================
-# STATISTIK DESKRIPTIF
-# =========================================================
-
-mean_return = round(
-    df['Return'].mean()*100,
-    2
-)
-
-max_return = round(
-    df['Return'].max()*100,
-    2
-)
-
-min_return = round(
-    df['Return'].min()*100,
-    2
-)
-
-# =========================================================
-# REPLACE CHART DATA
-# =========================================================
-
-html = html.replace(
-    "{{labels}}",
-    json.dumps(labels)
-)
-
-html = html.replace(
-    "{{close_data}}",
-    json.dumps(close_data)
-)
-
-html = html.replace(
-    "{{ma7_data}}",
-    json.dumps(ma7_data)
-)
-
-html = html.replace(
-    "{{ma30_data}}",
-    json.dumps(ma30_data)
-)
-
-html = html.replace(
-    "{{volume_data}}",
-    json.dumps(volume_data)
-)
-
-html = html.replace(
-    "{{volatility_data}}",
-    json.dumps(volatility_data)
-)
-
-# =========================================================
 # CHART DATA
 # =========================================================
 
@@ -261,12 +199,18 @@ close_data = (
 )
 
 ma7_data = [
-    None if pd.isna(x) else round(x,2)
+
+    None if pd.isna(x)
+    else round(x,2)
+
     for x in df['MA7']
 ]
 
 ma30_data = [
-    None if pd.isna(x) else round(x,2)
+
+    None if pd.isna(x)
+    else round(x,2)
+
     for x in df['MA30']
 ]
 
@@ -281,6 +225,7 @@ volatility_data = (
     .fillna(0)
     .tolist()
 )
+
 # =========================================================
 # LOAD HTML TEMPLATE
 # =========================================================
@@ -362,53 +307,38 @@ html = html.replace(
     str(sentiment_score)
 )
 
-html = html.replace(
-    "{{mean_return}}",
-    str(mean_return)
-)
-
-html = html.replace(
-    "{{max_return}}",
-    str(max_return)
-)
-
-html = html.replace(
-    "{{min_return}}",
-    str(min_return)
-)
-
 # =========================================================
 # REPLACE CHART DATA
 # =========================================================
 
 html = html.replace(
     "{{labels}}",
-    str(labels)
+    json.dumps(labels)
 )
 
 html = html.replace(
     "{{close_data}}",
-    str(close_data)
+    json.dumps(close_data)
 )
 
 html = html.replace(
     "{{ma7_data}}",
-    str(ma7_data)
+    json.dumps(ma7_data)
 )
 
 html = html.replace(
     "{{ma30_data}}",
-    str(ma30_data)
+    json.dumps(ma30_data)
 )
 
 html = html.replace(
     "{{volume_data}}",
-    str(volume_data)
+    json.dumps(volume_data)
 )
 
 html = html.replace(
     "{{volatility_data}}",
-    str(volatility_data)
+    json.dumps(volatility_data)
 )
 
 # =========================================================
