@@ -226,17 +226,15 @@ close_data = (
     .tolist()
 )
 
-ma7_data = (
-    df['MA7']
-    .replace({np.nan: None})
-    .tolist()
-)
+ma7_data = [
+    None if pd.isna(x) else round(x,2)
+    for x in df['MA7']
+]
 
-ma30_data = (
-    df['MA30']
-    .replace({np.nan: None})
-    .tolist()
-)
+ma30_data = [
+    None if pd.isna(x) else round(x,2)
+    for x in df['MA30']
+]
 
 volume_data = (
     df['Volume']
