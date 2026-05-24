@@ -216,12 +216,12 @@ min_return = round(
 
 html = html.replace(
     "{{labels}}",
-    str(labels)
+    json.dumps(labels)
 )
 
 html = html.replace(
     "{{close_data}}",
-    str(close_data)
+    json.dumps(close_data)
 )
 
 html = html.replace(
@@ -236,12 +236,50 @@ html = html.replace(
 
 html = html.replace(
     "{{volume_data}}",
-    str(volume_data)
+    json.dumps(volume_data)
 )
 
 html = html.replace(
     "{{volatility_data}}",
-    str(volatility_data)
+    json.dumps(volatility_data)
+)
+
+# =========================================================
+# CHART DATA
+# =========================================================
+
+labels = (
+    df['Date']
+    .dt.strftime('%b')
+    .tolist()
+)
+
+close_data = (
+    df['Close']
+    .fillna(0)
+    .tolist()
+)
+
+ma7_data = [
+    None if pd.isna(x) else round(x,2)
+    for x in df['MA7']
+]
+
+ma30_data = [
+    None if pd.isna(x) else round(x,2)
+    for x in df['MA30']
+]
+
+volume_data = (
+    df['Volume']
+    .fillna(0)
+    .tolist()
+)
+
+volatility_data = (
+    df['Volatility']
+    .fillna(0)
+    .tolist()
 )
 # =========================================================
 # LOAD HTML TEMPLATE
