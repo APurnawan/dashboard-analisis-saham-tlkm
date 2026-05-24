@@ -211,19 +211,17 @@ min_return = round(
 )
 
 # =========================================================
-# CHART DATA
+# REPLACE CHART DATA
 # =========================================================
 
-labels = (
-    df['Date']
-    .dt.strftime('%b')
-    .tolist()
+html = html.replace(
+    "{{labels}}",
+    str(labels)
 )
 
-close_data = (
-    df['Close']
-    .fillna(0)
-    .tolist()
+html = html.replace(
+    "{{close_data}}",
+    str(close_data)
 )
 
 html = html.replace(
@@ -235,18 +233,16 @@ html = html.replace(
     "{{ma30_data}}",
     json.dumps(ma30_data)
 )
-volume_data = (
-    df['Volume']
-    .fillna(0)
-    .tolist()
+
+html = html.replace(
+    "{{volume_data}}",
+    str(volume_data)
 )
 
-volatility_data = (
-    df['Volatility']
-    .fillna(0)
-    .tolist()
+html = html.replace(
+    "{{volatility_data}}",
+    str(volatility_data)
 )
-
 # =========================================================
 # LOAD HTML TEMPLATE
 # =========================================================
