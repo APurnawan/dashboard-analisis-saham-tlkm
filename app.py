@@ -18,25 +18,37 @@ st.set_page_config(
 # PERIOD SELECTOR
 # =========================================================
 
-period_option = st.selectbox(
 
     "Pilih Periode",
 
     [
-        "1 Tahun",
-        "6 Bulan",
+        "1 Bulan",
         "3 Bulan",
-        "1 Bulan"
+        "6 Bulan",
+        "1 Tahun",
+        "2 Tahun",
+        "5 Tahun",
+        "10 Tahun",
+        "Max"
     ]
-
-)
 
 period_map = {
 
-    "1 Tahun":"1y",
-    "6 Bulan":"6mo",
+    "1 Bulan":"1mo",
+
     "3 Bulan":"3mo",
-    "1 Bulan":"1mo"
+
+    "6 Bulan":"6mo",
+
+    "1 Tahun":"1y",
+
+    "2 Tahun":"2y",
+
+    "5 Tahun":"5y",
+
+    "10 Tahun":"10y",
+
+    "Max":"max"
 
 }
 
