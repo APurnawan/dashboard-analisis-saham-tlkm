@@ -228,13 +228,11 @@ close_data = (
 
 ma7_data = (
     df['MA7']
-    .fillna(0)
     .tolist()
 )
 
 ma30_data = (
     df['MA30']
-    .fillna(0)
     .tolist()
 )
 
