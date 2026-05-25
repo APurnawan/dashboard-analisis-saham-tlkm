@@ -25,16 +25,26 @@
     box-sizing:border-box;
 }
 
+html,
+body{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+}
+
 body{
     background:#050f1f;
     font-family:'Segoe UI',sans-serif;
     color:white;
-    padding:18px;
+    padding:14px;
+}
 
-    overflow-x:hidden;
-    overflow-y:auto;
+/* =========================
+   CONTAINER
+========================= */
 
-    min-height:100vh;
+.container-fluid{
+    padding:0;
 }
 
 /* =========================
@@ -44,11 +54,13 @@ body{
 .dashboard{
     background:linear-gradient(145deg,#071424,#0b1d36);
     border-radius:24px;
-    padding:20px;
-    box-shadow:0 0 45px rgba(0,0,0,0.45);
+    padding:18px;
+    box-shadow:0 0 40px rgba(0,0,0,0.45);
 
-    min-height:calc(100vh - 36px);
+    width:100%;
+    overflow:hidden;
 }
+
 /* =========================
    HEADER
 ========================= */
@@ -57,8 +69,8 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:20px;
     gap:15px;
+    margin-bottom:18px;
 }
 
 .dashboard-title{
@@ -72,23 +84,28 @@ body{
 }
 
 .dashboard-title h1{
-    font-size:30px;
+    font-size:28px;
     font-weight:700;
     margin:0;
 }
 
 .header-right{
-    display:flex;
-    align-items:center;
-    gap:15px;
+    color:#94a3b8;
+    font-size:14px;
 }
 
-.period-select{
-    background:#12233e;
-    border:none;
-    color:white;
-    padding:10px 15px;
-    border-radius:12px;
+/* =========================
+   ROW FIX
+========================= */
+
+.row{
+    margin-left:0 !important;
+    margin-right:0 !important;
+}
+
+.row > *{
+    padding-left:8px !important;
+    padding-right:8px !important;
 }
 
 /* =========================
@@ -101,11 +118,9 @@ body{
     border-radius:20px;
     padding:18px;
     box-shadow:0 0 18px rgba(0,0,0,0.25);
-    transition:0.3s;
-}
 
-.card-custom:hover{
-    transform:translateY(-2px);
+    width:100%;
+    overflow:hidden;
 }
 
 .card-title-small{
@@ -133,19 +148,31 @@ body{
 }
 
 /* =========================
-   CHART
+   CHART AREA
 ========================= */
 
 .chart-container{
-    height:280px;
+    position:relative;
+    height:320px;
+    width:100%;
 }
 
 .volume-container{
-    height:120px;
+    position:relative;
+    height:140px;
+    width:100%;
 }
 
 .forecast-container{
-    height:190px;
+    position:relative;
+    height:280px;
+    width:100%;
+    padding-bottom:15px;
+}
+
+canvas{
+    width:100% !important;
+    height:100% !important;
 }
 
 /* =========================
@@ -153,8 +180,7 @@ body{
 ========================= */
 
 .forecast-box{
-    border:1px solid rgba(245,158,11,0.28);
-    box-shadow:0 0 18px rgba(245,158,11,0.08);
+    border:1px solid rgba(245,158,11,0.25);
 }
 
 /* =========================
@@ -166,19 +192,7 @@ body{
     flex-direction:column;
     gap:14px;
 }
-.row.g-3{
-    align-items:stretch;
-}
 
-.col-lg-9,
-.col-lg-3{
-    display:flex;
-    flex-direction:column;
-}
-
-.right-side{
-    height:100%;
-}
 /* =========================
    SUMMARY
 ========================= */
@@ -187,11 +201,13 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:10px;
+
+    padding:8px 0;
+
+    border-bottom:1px solid rgba(255,255,255,0.05);
+
     font-size:14px;
     color:#d4dce7;
-    padding-bottom:8px;
-    border-bottom:1px solid rgba(255,255,255,0.04);
 }
 
 /* =========================
@@ -202,7 +218,6 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
 }
 
 .gauge-half{
@@ -249,7 +264,7 @@ body{
     width:180px;
     display:flex;
     justify-content:space-between;
-    margin-top:6px;
+    margin-top:8px;
     font-size:12px;
     color:#cbd5e1;
 }
@@ -261,7 +276,6 @@ body{
 
 .gauge-info h3{
     font-size:32px;
-    font-weight:bold;
     margin:0;
 }
 
@@ -270,22 +284,19 @@ body{
 ========================= */
 
 .mini-chart{
-    height:45px;
+    height:60px;
+    position:relative;
 }
 
 /* =========================
-   SOURCE CARD MODERN
+   SOURCE CARD
 ========================= */
 
 .source-card{
-    padding:18px;
     display:flex;
     flex-direction:column;
     gap:18px;
-    min-height:auto;
 }
-
-/* HEADER */
 
 .source-header{
     display:flex;
@@ -295,57 +306,63 @@ body{
 
 .source-header h5{
     margin:0;
-    font-size:22px;
+    font-size:20px;
     font-weight:700;
 }
 
 .source-badge{
     background:rgba(34,197,94,0.15);
     color:#22c55e;
+
     padding:6px 12px;
+
     border-radius:999px;
+
     font-size:11px;
     font-weight:700;
-    letter-spacing:1px;
 }
-
-/* PROVIDER */
 
 .source-provider{
     display:flex;
     align-items:center;
     gap:14px;
+
     background:rgba(255,255,255,0.03);
+
     padding:14px;
+
     border-radius:16px;
 }
 
 .provider-icon{
     width:52px;
     height:52px;
+
     border-radius:14px;
+
     background:rgba(34,197,94,0.12);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     color:#22c55e;
+
     font-size:22px;
+
     flex-shrink:0;
 }
 
 .provider-info h6{
     margin:0;
-    font-size:16px;
+    font-size:17px;
     font-weight:700;
-    color:#ffffff;
 }
 
 .provider-info span{
     color:#94a3b8;
     font-size:13px;
 }
-
-/* PROJECT BOX */
 
 .project-box{
     background:linear-gradient(
@@ -364,14 +381,12 @@ body{
 .project-title{
     font-size:16px;
     font-weight:700;
-    color:#f8fafc;
     margin-bottom:4px;
 }
 
 .project-batch{
     color:#f59e0b;
     font-size:13px;
-    font-weight:600;
     margin-bottom:14px;
 }
 
@@ -383,32 +398,24 @@ body{
     letter-spacing:1px;
 }
 
-/* MEMBER GRID */
-
 .member-grid{
     display:grid;
-    grid-template-columns:1fr;
     gap:10px;
 }
 
 .member-item{
     background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.04);
+
     border-radius:12px;
+
     padding:10px 12px;
-    font-size:13px;
-    color:#e2e8f0;
 
     display:flex;
     align-items:center;
     gap:10px;
 
-    transition:0.3s;
-}
-
-.member-item:hover{
-    background:rgba(245,158,11,0.12);
-    transform:translateY(-2px);
+    font-size:13px;
+    color:#e2e8f0;
 }
 
 .member-item i{
@@ -419,27 +426,10 @@ body{
    RESPONSIVE
 ========================= */
 
-@media(max-width:1200px){
-
-    .dashboard-title h1{
-        font-size:24px;
-    }
-
-    .big-number{
-        font-size:26px;
-    }
-
-}
-
 @media(max-width:992px){
 
     body{
-        overflow:auto;
-        padding:12px;
-    }
-
-    .dashboard{
-        padding:15px;
+        padding:10px;
     }
 
     .dashboard-header{
@@ -447,30 +437,34 @@ body{
         align-items:flex-start;
     }
 
+    .dashboard-title h1{
+        font-size:24px;
+    }
+
     .chart-container{
-        height:240px;
+        height:280px;
     }
 
     .forecast-container{
-        height:180px;
-    }
-
-    .source-header h5{
-        font-size:20px;
-    }
-
-    .project-title{
-        font-size:15px;
+        height:240px;
     }
 
 }
 
 @media(max-width:768px){
 
+    .dashboard{
+        padding:14px;
+    }
+
+    .card-custom{
+        padding:15px;
+    }
+
     .dashboard-title{
         flex-direction:column;
         align-items:flex-start;
-        gap:8px;
+        gap:6px;
     }
 
     .dashboard-title h1{
@@ -482,27 +476,11 @@ body{
     }
 
     .chart-container{
-    height:320px;
-    position:relative;
-    }
-
-    .volume-container{
-    height:140px;
-    position:relative;
+        height:240px;
     }
 
     .forecast-container{
-    height:260px;
-    position:relative;
-    padding-bottom:15px;
-    }
-
-    .member-item{
-        font-size:12px;
-    }
-
-    .provider-info h6{
-        font-size:15px;
+        height:220px;
     }
 
 }
@@ -519,8 +497,8 @@ body{
     }
 
     .card-custom{
-        padding:14px;
         border-radius:16px;
+        padding:14px;
     }
 
     .dashboard-title h1{
@@ -536,31 +514,17 @@ body{
     }
 
     .source-provider{
-        flex-direction:row;
-        align-items:center;
+        gap:10px;
     }
 
     .provider-icon{
-        width:46px;
-        height:46px;
+        width:45px;
+        height:45px;
         font-size:18px;
     }
 
-    .project-box{
-        padding:14px;
-    }
-
-    .project-title{
-        font-size:14px;
-    }
-
-    .project-batch{
-        font-size:12px;
-    }
-
     .member-item{
-        font-size:11px;
-        padding:9px 10px;
+        font-size:12px;
     }
 
 }
