@@ -166,7 +166,19 @@ body{
     flex-direction:column;
     gap:14px;
 }
+.row.g-3{
+    align-items:stretch;
+}
 
+.col-lg-9,
+.col-lg-3{
+    display:flex;
+    flex-direction:column;
+}
+
+.right-side{
+    height:100%;
+}
 /* =========================
    SUMMARY
 ========================= */
@@ -470,15 +482,19 @@ body{
     }
 
     .chart-container{
-        height:220px;
+    height:320px;
+    position:relative;
     }
 
     .volume-container{
-        height:100px;
+    height:140px;
+    position:relative;
     }
 
     .forecast-container{
-        height:170px;
+    height:260px;
+    position:relative;
+    padding-bottom:15px;
     }
 
     .member-item{
