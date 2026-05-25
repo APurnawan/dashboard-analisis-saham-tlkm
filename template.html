@@ -17,7 +17,6 @@
 
 <!-- ChartJS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
 
 *{
@@ -31,25 +30,30 @@ body{
     font-family:'Segoe UI',sans-serif;
     color:white;
     padding:18px;
-    overflow:hidden;
+    overflow-x:hidden;
 }
 
-/* DASHBOARD */
+/* =========================
+   DASHBOARD
+========================= */
 
 .dashboard{
     background:linear-gradient(145deg,#071424,#0b1d36);
-    border-radius:22px;
-    padding:18px;
-    box-shadow:0 0 40px rgba(0,0,0,0.45);
+    border-radius:24px;
+    padding:20px;
+    box-shadow:0 0 45px rgba(0,0,0,0.45);
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .dashboard-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:18px;
+    margin-bottom:20px;
+    gap:15px;
 }
 
 .dashboard-title{
@@ -58,8 +62,12 @@ body{
     gap:14px;
 }
 
+.dashboard-title i{
+    color:#22c55e;
+}
+
 .dashboard-title h1{
-    font-size:28px;
+    font-size:30px;
     font-weight:700;
     margin:0;
 }
@@ -78,18 +86,25 @@ body{
     border-radius:12px;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 
 .card-custom{
-    background:rgba(13,25,47,0.95);
+    background:rgba(13,25,47,0.96);
     border:1px solid rgba(255,255,255,0.05);
-    border-radius:18px;
-    padding:15px;
+    border-radius:20px;
+    padding:18px;
     box-shadow:0 0 18px rgba(0,0,0,0.25);
+    transition:0.3s;
+}
+
+.card-custom:hover{
+    transform:translateY(-2px);
 }
 
 .card-title-small{
-    color:#9fb2cc;
+    color:#94a3b8;
     font-size:13px;
     margin-bottom:8px;
 }
@@ -97,7 +112,7 @@ body{
 .big-number{
     font-size:30px;
     font-weight:700;
-    line-height:1;
+    line-height:1.1;
 }
 
 .green{
@@ -112,28 +127,34 @@ body{
     color:#94a3b8;
 }
 
-/* CHART */
+/* =========================
+   CHART
+========================= */
 
 .chart-container{
-    height:270px;
+    height:280px;
 }
 
 .volume-container{
     height:120px;
 }
 
-/* FORECAST */
-
 .forecast-container{
-    height:180px;
+    height:190px;
 }
+
+/* =========================
+   FORECAST
+========================= */
 
 .forecast-box{
-    border:1px solid rgba(245,158,11,0.3);
-    box-shadow:0 0 20px rgba(245,158,11,0.08);
+    border:1px solid rgba(245,158,11,0.28);
+    box-shadow:0 0 18px rgba(245,158,11,0.08);
 }
 
-/* RIGHT SIDE */
+/* =========================
+   RIGHT SIDE
+========================= */
 
 .right-side{
     display:flex;
@@ -141,17 +162,24 @@ body{
     gap:14px;
 }
 
-/* SUMMARY */
+/* =========================
+   SUMMARY
+========================= */
 
 .summary-item{
     display:flex;
     justify-content:space-between;
-    margin-bottom:8px;
+    align-items:center;
+    margin-bottom:10px;
     font-size:14px;
     color:#d4dce7;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(255,255,255,0.04);
 }
 
-/* GAUGE */
+/* =========================
+   GAUGE
+========================= */
 
 .gauge-wrapper{
     display:flex;
@@ -167,6 +195,7 @@ body{
     border-top-right-radius:180px;
     overflow:hidden;
     position:relative;
+
     background:conic-gradient(
         from 180deg,
         #ff3b30 0deg 60deg,
@@ -219,67 +248,300 @@ body{
     margin:0;
 }
 
+/* =========================
+   MINI CHART
+========================= */
+
 .mini-chart{
     height:45px;
 }
 
-/* RESPONSIVE */
+/* =========================
+   SOURCE CARD MODERN
+========================= */
+
+.source-card{
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    min-height:auto;
+}
+
+/* HEADER */
+
+.source-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.source-header h5{
+    margin:0;
+    font-size:22px;
+    font-weight:700;
+}
+
+.source-badge{
+    background:rgba(34,197,94,0.15);
+    color:#22c55e;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+/* PROVIDER */
+
+.source-provider{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:rgba(255,255,255,0.03);
+    padding:14px;
+    border-radius:16px;
+}
+
+.provider-icon{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    background:rgba(34,197,94,0.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#22c55e;
+    font-size:22px;
+    flex-shrink:0;
+}
+
+.provider-info h6{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    color:#ffffff;
+}
+
+.provider-info span{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+/* PROJECT BOX */
+
+.project-box{
+    background:linear-gradient(
+        145deg,
+        rgba(245,158,11,0.10),
+        rgba(255,255,255,0.02)
+    );
+
+    border:1px solid rgba(245,158,11,0.15);
+
+    border-radius:18px;
+
+    padding:16px;
+}
+
+.project-title{
+    font-size:16px;
+    font-weight:700;
+    color:#f8fafc;
+    margin-bottom:4px;
+}
+
+.project-batch{
+    color:#f59e0b;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:14px;
+}
+
+.member-title{
+    font-size:11px;
+    color:#94a3b8;
+    margin-bottom:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+/* MEMBER GRID */
+
+.member-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.member-item{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.04);
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:13px;
+    color:#e2e8f0;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    transition:0.3s;
+}
+
+.member-item:hover{
+    background:rgba(245,158,11,0.12);
+    transform:translateY(-2px);
+}
+
+.member-item i{
+    color:#f59e0b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+
+    .dashboard-title h1{
+        font-size:24px;
+    }
+
+    .big-number{
+        font-size:26px;
+    }
+
+}
 
 @media(max-width:992px){
 
     body{
         overflow:auto;
+        padding:12px;
+    }
+
+    .dashboard{
+        padding:15px;
     }
 
     .dashboard-header{
         flex-direction:column;
         align-items:flex-start;
-        gap:15px;
     }
 
     .chart-container{
-        height:250px;
+        height:240px;
     }
-/* MINI PROJECT */
 
-.project-mini{
-    text-align:left;
-    padding-left:10px;
-}
-.source-card{
-    min-height:180px;
-}
-.project-mini h6{
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:2px;
-    color:#f8fafc;
-}
+    .forecast-container{
+        height:180px;
+    }
 
-.project-subtitle{
-    font-size:8px;
-    color:#f59e0b;
-    font-weight:600;
-    margin-bottom:4px;
-    line-height:1.2;
+    .source-header h5{
+        font-size:20px;
+    }
+
+    .project-title{
+        font-size:15px;
+    }
+
 }
 
-.project-group{
-    font-size:9px;
-    color:#cbd5e1;
-    margin-bottom:3px;
+@media(max-width:768px){
+
+    .dashboard-title{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
+
+    .dashboard-title h1{
+        font-size:22px;
+    }
+
+    .big-number{
+        font-size:24px;
+    }
+
+    .chart-container{
+        height:220px;
+    }
+
+    .volume-container{
+        height:100px;
+    }
+
+    .forecast-container{
+        height:170px;
+    }
+
+    .member-item{
+        font-size:12px;
+    }
+
+    .provider-info h6{
+        font-size:15px;
+    }
+
 }
 
-.member-list{
-    list-style:none;
-    padding:0;
-    margin:0;
-}
+@media(max-width:576px){
 
-.member-list li{
-    font-size:8px;
-    color:#e2e8f0;
-    line-height:1.3;
+    body{
+        padding:8px;
+    }
+
+    .dashboard{
+        border-radius:18px;
+        padding:12px;
+    }
+
+    .card-custom{
+        padding:14px;
+        border-radius:16px;
+    }
+
+    .dashboard-title h1{
+        font-size:20px;
+    }
+
+    .big-number{
+        font-size:22px;
+    }
+
+    .summary-item{
+        font-size:13px;
+    }
+
+    .source-provider{
+        flex-direction:row;
+        align-items:center;
+    }
+
+    .provider-icon{
+        width:46px;
+        height:46px;
+        font-size:18px;
+    }
+
+    .project-box{
+        padding:14px;
+    }
+
+    .project-title{
+        font-size:14px;
+    }
+
+    .project-batch{
+        font-size:12px;
+    }
+
+    .member-item{
+        font-size:11px;
+        padding:9px 10px;
+    }
+
 }
 
 </style>
@@ -563,65 +825,70 @@ Volatilitas (30 Hari)
 
 <!-- SOURCE -->
 
-<div class="card-custom">
+<div class="card-custom source-card">
 
-<h5 class="mb-3">
-Sumber Data
-</h5>
+    <div class="source-header">
+        <h5>Sumber Data</h5>
 
-<div class="row align-items-start">
+        <span class="source-badge">
+            LIVE
+        </span>
+    </div>
 
-    <!-- LEFT -->
-    <div class="col-7">
+    <!-- DATA SOURCE -->
 
-        <div class="d-flex align-items-center gap-2">
+    <div class="source-provider">
 
-            <span class="green">
+        <div class="provider-icon">
             <i class="fa-solid fa-database"></i>
-            </span>
+        </div>
 
-            <div>
+        <div class="provider-info">
 
-                <div>
-                yfinance
-                </div>
+            <h6>yfinance</h6>
 
-                <small class="gray">
-                Realtime
-                </small>
-
-            </div>
+            <span>Realtime Market Data</span>
 
         </div>
 
     </div>
 
-    <!-- RIGHT -->
-    <div class="col-7">
+    <!-- PROJECT INFO -->
 
-<div class="project-mini">
+    <div class="project-box">
 
-    <div class="project-subtitle">
-    VINIX7 - FINAL PROJECT BATCH 4
+        <div class="project-title">
+            VINIX7 FINAL PROJECT
+        </div>
+
+        <div class="project-batch">
+            Batch 4 • Kelompok 12
+        </div>
+
+        <div class="member-title">
+            Tim Pengembang
+        </div>
+
+        <div class="member-grid">
+
+            <div class="member-item">
+                <i class="fa-solid fa-user"></i>
+                Sahira Anindya
+            </div>
+
+            <div class="member-item">
+                <i class="fa-solid fa-user"></i>
+                Agus Purnawan
+            </div>
+
+            <div class="member-item">
+                <i class="fa-solid fa-user"></i>
+                Muhammad Sultan
+            </div>
+
+        </div>
+
     </div>
-
-    <div class="project-group">
-    KELOMPOK 12
-    </div>
-
-    <ul class="member-list">
-
-        <li>Sahira Anindya</li>
-        <li>Agus Purnawan</li>
-        <li>Muhammad Sultan</li>
-
-    </ul>
-
-</div>
-
-    </div>
-
-</div>
 
 </div>
 
