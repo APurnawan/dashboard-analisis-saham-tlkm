@@ -36,7 +36,10 @@ body{
     background:#050f1f;
     font-family:'Segoe UI',sans-serif;
     color:white;
+
     padding:14px;
+
+    overflow-y:auto;
 }
 
 /* =========================
@@ -45,6 +48,7 @@ body{
 
 .container-fluid{
     padding:0;
+    margin:0;
 }
 
 /* =========================
@@ -53,12 +57,16 @@ body{
 
 .dashboard{
     background:linear-gradient(145deg,#071424,#0b1d36);
+
     border-radius:24px;
+
     padding:18px;
+
     box-shadow:0 0 40px rgba(0,0,0,0.45);
 
     width:100%;
-    overflow:hidden;
+
+    overflow:visible;
 }
 
 /* =========================
@@ -69,7 +77,9 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     gap:15px;
+
     margin-bottom:18px;
 }
 
@@ -114,13 +124,16 @@ body{
 
 .card-custom{
     background:rgba(13,25,47,0.96);
+
     border:1px solid rgba(255,255,255,0.05);
+
     border-radius:20px;
+
     padding:18px;
+
     box-shadow:0 0 18px rgba(0,0,0,0.25);
 
     width:100%;
-    overflow:hidden;
 }
 
 .card-title-small{
@@ -148,29 +161,32 @@ body{
 }
 
 /* =========================
-   CHART AREA
+   CHART
 ========================= */
 
 .chart-container{
     position:relative;
-    height:320px;
     width:100%;
+    height:260px;
 }
 
 .volume-container{
     position:relative;
-    height:140px;
     width:100%;
+    height:110px;
 }
 
 .forecast-container{
     position:relative;
-    height:280px;
     width:100%;
-    padding-bottom:15px;
+    height:210px;
+
+    padding-bottom:10px;
 }
 
 canvas{
+    display:block;
+
     width:100% !important;
     height:100% !important;
 }
@@ -223,9 +239,12 @@ canvas{
 .gauge-half{
     width:180px;
     height:90px;
+
     border-top-left-radius:180px;
     border-top-right-radius:180px;
+
     overflow:hidden;
+
     position:relative;
 
     background:conic-gradient(
@@ -238,11 +257,15 @@ canvas{
 
 .gauge-mask{
     position:absolute;
+
     width:140px;
     height:70px;
+
     background:#081321;
+
     border-top-left-radius:140px;
     border-top-right-radius:140px;
+
     bottom:0;
     left:20px;
 }
@@ -250,22 +273,32 @@ canvas{
 .needle{
     width:4px;
     height:75px;
+
     background:white;
+
     position:absolute;
+
     bottom:0;
     left:50%;
+
     transform-origin:bottom center;
     transform:rotate(-40deg);
+
     border-radius:10px;
+
     z-index:10;
 }
 
 .gauge-labels{
     width:180px;
+
     display:flex;
     justify-content:space-between;
+
     margin-top:8px;
+
     font-size:12px;
+
     color:#cbd5e1;
 }
 
@@ -284,8 +317,8 @@ canvas{
 ========================= */
 
 .mini-chart{
-    height:60px;
     position:relative;
+    height:60px;
 }
 
 /* =========================
@@ -306,12 +339,14 @@ canvas{
 
 .source-header h5{
     margin:0;
+
     font-size:20px;
     font-weight:700;
 }
 
 .source-badge{
     background:rgba(34,197,94,0.15);
+
     color:#22c55e;
 
     padding:6px 12px;
@@ -325,6 +360,7 @@ canvas{
 .source-provider{
     display:flex;
     align-items:center;
+
     gap:14px;
 
     background:rgba(255,255,255,0.03);
@@ -355,6 +391,7 @@ canvas{
 
 .provider-info h6{
     margin:0;
+
     font-size:17px;
     font-weight:700;
 }
@@ -381,20 +418,27 @@ canvas{
 .project-title{
     font-size:16px;
     font-weight:700;
+
     margin-bottom:4px;
 }
 
 .project-batch{
     color:#f59e0b;
+
     font-size:13px;
+
     margin-bottom:14px;
 }
 
 .member-title{
     font-size:11px;
+
     color:#94a3b8;
+
     margin-bottom:10px;
+
     text-transform:uppercase;
+
     letter-spacing:1px;
 }
 
@@ -415,6 +459,7 @@ canvas{
     gap:10px;
 
     font-size:13px;
+
     color:#e2e8f0;
 }
 
@@ -442,11 +487,11 @@ canvas{
     }
 
     .chart-container{
-        height:280px;
+        height:240px;
     }
 
     .forecast-container{
-        height:240px;
+        height:200px;
     }
 
 }
@@ -476,11 +521,11 @@ canvas{
     }
 
     .chart-container{
-        height:240px;
+        height:220px;
     }
 
     .forecast-container{
-        height:220px;
+        height:190px;
     }
 
 }
@@ -513,13 +558,10 @@ canvas{
         font-size:13px;
     }
 
-    .source-provider{
-        gap:10px;
-    }
-
     .provider-icon{
         width:45px;
         height:45px;
+
         font-size:18px;
     }
 
