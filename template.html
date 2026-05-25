@@ -122,6 +122,17 @@ body{
     height:120px;
 }
 
+/* FORECAST */
+
+.forecast-container{
+    height:180px;
+}
+
+.forecast-box{
+    border:1px solid rgba(245,158,11,0.3);
+    box-shadow:0 0 20px rgba(245,158,11,0.08);
+}
+
 /* RIGHT SIDE */
 
 .right-side{
@@ -231,6 +242,7 @@ body{
     }
 
 }
+
 
 </style>
 
@@ -360,23 +372,44 @@ Pergerakan Harga Saham
 
 </div>
 
+<div class="row g-3">
+
 <!-- VOLUME -->
 
-<div class="card-custom">
+<div class="card-custom mb-3">
 
-<h6 class="mb-3">
-Volume Trading
-</h6>
+    <h6 class="mb-3">
+    Volume Trading
+    </h6>
 
-<div class="volume-container">
+    <div class="volume-container">
 
-<canvas id="volumeChart"></canvas>
+        <canvas id="volumeChart"></canvas>
+
+    </div>
+
+</div>
+
+<!-- FORECAST -->
+
+<div class="card-custom forecast-box">
+
+    <h6 class="mb-3">
+    ?? Forecast 30 Hari
+    </h6>
+
+    <div class="forecast-container">
+
+        <canvas id="forecastChart"></canvas>
+
+    </div>
 
 </div>
 
 </div>
 
 </div>
+
 
 <!-- RIGHT -->
 
@@ -498,21 +531,64 @@ Volatilitas (30 Hari)
 Sumber Data
 </h5>
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="row align-items-center">
 
-<div>
+    <!-- LEFT -->
+    <div class="col-6">
 
-<span class="green">
-<i class="fa-solid fa-database"></i>
-</span>
+        <div class="d-flex align-items-center gap-2">
 
-yfinance
+            <span class="green">
+            <i class="fa-solid fa-database"></i>
+            </span>
+
+            <div>
+
+                <div>
+                yfinance
+                </div>
+
+                <small class="gray">
+                Realtime
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-6">
+
+        <div class="project-mini">
+
+            <h6>
+            VINIX7
+            </h6>
+
+            <p>
+            FINAL PROJECT BATCH 4
+
+            <span>
+            KELOMPOK 12:
+            </span>
+			<br>
+			- Sahira Anindya<br>
+			- Agus Purnawan<br>
+			- Muhammad Sultan Badruzzaman
+            <p>
+
+        </div>
+
+    </div>
 
 </div>
 
-<div class="gray">
-Realtime
 </div>
+
+</div>
+
 
 </div>
 
@@ -527,6 +603,9 @@ Realtime
 </div>
 
 </div>
+
+</div>
+
 
 <script>
 
@@ -706,6 +785,83 @@ new Chart(volumeChart, {
 });
 
 /* =========================
+   FORECAST CHART
+========================= */
+
+const forecastChart =
+document.getElementById('forecastChart');
+
+new Chart(forecastChart, {
+
+    type:'line',
+
+    data:{
+
+        labels: {{forecast_labels}},
+
+        datasets:[{
+
+            label:'Forecast 30 Hari',
+
+            data: {{forecast_data}},
+
+            borderColor:'#f59e0b',
+
+            backgroundColor:'rgba(245,158,11,0.15)',
+
+            fill:true,
+
+            tension:0.4,
+
+            borderWidth:3,
+
+            pointRadius:0
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
+                }
+            }
+        },
+
+        scales:{
+
+            x:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            },
+
+            y:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+/* =========================
    VOLATILITY MINI CHART
 ========================= */
 
@@ -764,6 +920,7 @@ new Chart(miniChart, {
 });
 
 </script>
+
 
 </body>
 </html>
