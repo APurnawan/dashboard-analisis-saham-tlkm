@@ -199,6 +199,43 @@ else:
     latest_signal = "BEARISH"
 
     sentiment_score = 25
+    
+    
+# =========================================================
+# FORECAST DATA
+# =========================================================
+
+future_days = 30
+
+last_price_forecast = df['Close'].iloc[-1]
+
+forecast_values = []
+
+for i in range(future_days):
+
+    next_price = (
+        last_price_forecast
+        + (i * 5)
+        + np.random.normal(0,10)
+    )
+
+    forecast_values.append(
+        round(next_price,2)
+    )
+
+future_dates = pd.date_range(
+
+    start=df['Date'].iloc[-1],
+
+    periods=future_days
+)
+
+forecast_labels = (
+
+    future_dates
+    .strftime('%d %b')
+    .tolist()
+)    
 
 # =========================================================
 # CHART DATA
@@ -357,6 +394,16 @@ html = html.replace(
 html = html.replace(
     "{{volatility_data}}",
     json.dumps(volatility_data)
+)
+
+html = html.replace(
+    "{{forecast_labels}}",
+    json.dumps(forecast_labels)
+)
+
+html = html.replace(
+    "{{forecast_data}}",
+    json.dumps(forecast_values)
 )
 
 # =========================================================
