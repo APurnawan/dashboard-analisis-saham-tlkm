@@ -1,420 +1,967 @@
-import streamlit as st
-import streamlit.components.v1 as components
-import yfinance as yf
-import pandas as pd
-import numpy as np
-import json
+<!DOCTYPE html>
+<html lang="id">
 
-# =========================================================
-# PAGE CONFIG
-# =========================================================
+<head>
 
-st.set_page_config(
-    page_title="Dashboard Analisis Saham TLKM",
-    layout="wide"
-)
+<meta charset="UTF-8">
 
-# =========================================================
-# PERIOD SELECTOR
-# =========================================================
-# =========================================================
-# PERIOD SELECTOR
-# =========================================================
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-period_option = st.selectbox(
+<title>Dashboard Analisis Saham TLKM</title>
 
-    "Pilih Periode",
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    [
-        "1 Bulan",
-        "3 Bulan",
-        "6 Bulan",
-        "1 Tahun",
-        "2 Tahun",
-        "5 Tahun",
-        "10 Tahun",
-        "Max"
-    ]
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-)
+<!-- ChartJS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-period_map = {
+<style>
 
-    "1 Bulan":"1mo",
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    "3 Bulan":"3mo",
+body{
+    background:#050f1f;
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+    padding:18px;
+    overflow:hidden;
+}
 
-    "6 Bulan":"6mo",
+/* DASHBOARD */
 
-    "1 Tahun":"1y",
+.dashboard{
+    background:linear-gradient(145deg,#071424,#0b1d36);
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 0 40px rgba(0,0,0,0.45);
+}
 
-    "2 Tahun":"2y",
+/* HEADER */
 
-    "5 Tahun":"5y",
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
 
-    "10 Tahun":"10y",
+.dashboard-title{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
 
-    "Max":"max"
+.dashboard-title h1{
+    font-size:28px;
+    font-weight:700;
+    margin:0;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.period-select{
+    background:#12233e;
+    border:none;
+    color:white;
+    padding:10px 15px;
+    border-radius:12px;
+}
+
+/* CARD */
+
+.card-custom{
+    background:rgba(13,25,47,0.95);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:18px;
+    padding:15px;
+    box-shadow:0 0 18px rgba(0,0,0,0.25);
+}
+
+.card-title-small{
+    color:#9fb2cc;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.big-number{
+    font-size:30px;
+    font-weight:700;
+    line-height:1;
+}
+
+.green{
+    color:#22c55e;
+}
+
+.red{
+    color:#ef4444;
+}
+
+.gray{
+    color:#94a3b8;
+}
+
+/* CHART */
+
+.chart-container{
+    height:270px;
+}
+
+.volume-container{
+    height:120px;
+}
+
+/* FORECAST */
+
+.forecast-container{
+    height:180px;
+}
+
+.forecast-box{
+    border:1px solid rgba(245,158,11,0.3);
+    box-shadow:0 0 20px rgba(245,158,11,0.08);
+}
+
+/* RIGHT SIDE */
+
+.right-side{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+/* SUMMARY */
+
+.summary-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+    font-size:14px;
+    color:#d4dce7;
+}
+
+/* GAUGE */
+
+.gauge-wrapper{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.gauge-half{
+    width:180px;
+    height:90px;
+    border-top-left-radius:180px;
+    border-top-right-radius:180px;
+    overflow:hidden;
+    position:relative;
+    background:conic-gradient(
+        from 180deg,
+        #ff3b30 0deg 60deg,
+        #ffb020 60deg 120deg,
+        #22c55e 120deg 180deg
+    );
+}
+
+.gauge-mask{
+    position:absolute;
+    width:140px;
+    height:70px;
+    background:#081321;
+    border-top-left-radius:140px;
+    border-top-right-radius:140px;
+    bottom:0;
+    left:20px;
+}
+
+.needle{
+    width:4px;
+    height:75px;
+    background:white;
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform-origin:bottom center;
+    transform:rotate(-40deg);
+    border-radius:10px;
+    z-index:10;
+}
+
+.gauge-labels{
+    width:180px;
+    display:flex;
+    justify-content:space-between;
+    margin-top:6px;
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+.gauge-info{
+    text-align:center;
+    margin-top:12px;
+}
+
+.gauge-info h3{
+    font-size:32px;
+    font-weight:bold;
+    margin:0;
+}
+
+.mini-chart{
+    height:45px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:992px){
+
+    body{
+        overflow:auto;
+    }
+
+    .dashboard-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .chart-container{
+        height:250px;
+    }
+
+/* MINI PROJECT */
+
+.project-mini{
+    text-align:right;
+}
+
+.project-mini h6{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:4px;
+    color:#f8fafc;
+}
+
+.project-subtitle{
+    font-size:10px;
+    color:#f59e0b;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.project-group{
+    font-size:11px;
+    color:#cbd5e1;
+    margin-bottom:4px;
+}
+
+.member-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.member-list li{
+    font-size:10px;
+    color:#e2e8f0;
+    line-height:1.4;
 
 }
 
-selected_period = period_map[period_option]
 
-# =========================================================
-# LOAD DATA
-# =========================================================
+</style>
 
-df = yf.download(
+</head>
 
-    'TLKM.JK',
+<body>
 
-    period=selected_period,
+<div class="container-fluid">
 
-    auto_adjust=True,
+<div class="dashboard">
 
-    progress=False
-)
+<!-- HEADER -->
 
-# =========================================================
-# FIX DATAFRAME
-# =========================================================
+<div class="dashboard-header">
 
-if isinstance(df.columns, pd.MultiIndex):
+<div class="dashboard-title">
 
-    df.columns = df.columns.get_level_values(0)
+<i class="fa-solid fa-chart-line fa-2x"></i>
 
-df.reset_index(inplace=True)
+<h1>Dashboard Analisis Saham TLKM</h1>
 
-df.rename(
-    columns={df.columns[0]:'Date'},
-    inplace=True
-)
+</div>
 
-# =========================================================
-# FEATURE ENGINEERING
-# =========================================================
+<div class="header-right">
 
-# Return saham
-df['Return'] = df['Close'].pct_change()
+<span class="gray">
+Realtime Market Dashboard
+</span>
 
-# Moving Average
-df['MA7'] = df['Close'].rolling(7).mean()
+</div>
 
-df['MA30'] = df['Close'].rolling(30).mean()
+</div>
 
-# Volatility
-window_size = min(30, len(df))
+<!-- CONTENT -->
 
-df['Volatility'] = (
-    df['Return']
-    .rolling(window_size)
-    .std()
-)
+<div class="row g-3">
 
-# =========================================================
-# METRIC ANALYSIS
-# =========================================================
+<!-- LEFT -->
 
-last_close = round(
-    df['Close'].iloc[-1],
-    2
-)
+<div class="col-lg-9">
 
-first_close = round(
-    df['Close'].iloc[0],
-    2
-)
+<!-- TOP CARDS -->
 
-change_value = round(
-    last_close-first_close,
-    2
-)
+<div class="row g-3 mb-3">
 
-pct = round(
-    (change_value/first_close)*100,
-    2
-)
+<!-- HARGA -->
 
-change = f"{change_value} ({pct}%)"
+<div class="col-md-4">
 
-volume = int(df['Volume'].sum())
+<div class="card-custom">
 
-open_price = round(
-    df['Open'].iloc[0],
-    2
-)
+<div class="card-title-small">
+Harga Terakhir
+</div>
 
-high_price = round(
-    df['High'].max(),
-    2
-)
+<div class="big-number">
+{{last_close}}
+</div>
 
-low_price = round(
-    df['Low'].min(),
-    2
-)
+<div class="red mt-2">
+{{change}}
+</div>
 
-close_price = round(
-    df['Close'].iloc[-1],
-    2
-)
+</div>
 
-high52 = round(
-    df['High'].max(),
-    2
-)
+</div>
 
-low52 = round(
-    df['Low'].min(),
-    2
-)
+<!-- PERSENTASE -->
 
-# =========================================================
-# VOLATILITY VALUE
-# =========================================================
+<div class="col-md-4">
 
-if pd.isna(df['Volatility'].iloc[-1]):
+<div class="card-custom">
 
-    volatility = 0
+<div class="card-title-small">
+Perubahan Hari Ini
+</div>
 
-else:
+<div class="big-number green">
+{{pct}}
+</div>
 
-    volatility = round(
-        df['Volatility'].iloc[-1],
-        4
-    )
+<div class="green mt-2">
+{{change}}
+</div>
 
-# =========================================================
-# SIGNAL ANALYSIS
-# =========================================================
+</div>
 
-if df['MA7'].iloc[-1] > df['MA30'].iloc[-1]:
+</div>
 
-    latest_signal = "BULLISH"
+<!-- VOLUME -->
 
-    sentiment_score = 78
+<div class="col-md-4">
 
-else:
+<div class="card-custom">
 
-    latest_signal = "BEARISH"
+<div class="card-title-small">
+Volume
+</div>
 
-    sentiment_score = 25
-    
-    
-# =========================================================
-# FORECAST DATA
-# =========================================================
+<div class="big-number">
+{{volume}}
+</div>
 
-future_days = 30
+<div class="gray mt-2">
+Saham
+</div>
 
-last_price_forecast = df['Close'].iloc[-1]
+</div>
 
-forecast_values = []
+</div>
 
-for i in range(future_days):
+</div>
 
-    next_price = (
-        last_price_forecast
-        + (i * 5)
-        + np.random.normal(0,10)
-    )
+<!-- PRICE CHART -->
 
-    forecast_values.append(
-        round(next_price,2)
-    )
+<div class="card-custom mb-3">
 
-future_dates = pd.date_range(
+<h5 class="mb-3">
+Pergerakan Harga Saham
+</h5>
 
-    start=df['Date'].iloc[-1],
+<div class="chart-container">
 
-    periods=future_days
-)
+<canvas id="priceChart"></canvas>
 
-forecast_labels = (
+</div>
 
-    future_dates
-    .strftime('%d %b')
-    .tolist()
-)    
+</div>
 
-# =========================================================
-# CHART DATA
-# =========================================================
+<div class="row g-3">
 
-labels = (
-    df['Date']
-    .dt.strftime('%b %y')
-    .tolist()
-)
+<!-- VOLUME -->
 
-close_data = (
-    df['Close']
-    .fillna(0)
-    .tolist()
-)
+<div class="card-custom mb-3">
 
-ma7_data = [
+    <h6 class="mb-3">
+    Volume Trading
+    </h6>
 
-    None if pd.isna(x)
-    else round(x,2)
+    <div class="volume-container">
 
-    for x in df['MA7']
-]
+        <canvas id="volumeChart"></canvas>
 
-ma30_data = [
+    </div>
 
-    None if pd.isna(x)
-    else round(x,2)
+</div>
 
-    for x in df['MA30']
-]
+<!-- FORECAST -->
 
-volume_data = (
-    df['Volume']
-    .fillna(0)
-    .tolist()
-)
+<div class="card-custom forecast-box">
 
-volatility_data = (
-    df['Volatility']
-    .fillna(0)
-    .tolist()
-)
+    <h6 class="mb-3">
+    Forecast 30 Hari
+    </h6>
 
-# =========================================================
-# LOAD HTML TEMPLATE
-# =========================================================
+    <div class="forecast-container">
 
-with open(
-    "template.html",
-    "r",
-    encoding="utf-8"
-) as f:
+        <canvas id="forecastChart"></canvas>
 
-    html = f.read()
+    </div>
 
-# =========================================================
-# REPLACE METRIC
-# =========================================================
+</div>
 
-html = html.replace(
-    "{{last_close}}",
-    str(last_close)
-)
+</div>
 
-html = html.replace(
-    "{{pct}}",
-    str(pct)+"%"
-)
+</div>
 
-html = html.replace(
-    "{{change}}",
-    change
-)
 
-html = html.replace(
-    "{{volume}}",
-    f"{volume:,}"
-)
+<!-- RIGHT -->
 
-html = html.replace(
-    "{{open}}",
-    str(open_price)
-)
+<div class="col-lg-3">
 
-html = html.replace(
-    "{{high}}",
-    str(high_price)
-)
+<div class="right-side">
 
-html = html.replace(
-    "{{low}}",
-    str(low_price)
-)
+<!-- SUMMARY -->
 
-html = html.replace(
-    "{{close}}",
-    str(close_price)
-)
+<div class="card-custom">
 
-html = html.replace(
-    "{{high52}}",
-    str(high52)
-)
+<h5 class="mb-3">
+Ringkasan Harga
+</h5>
 
-html = html.replace(
-    "{{low52}}",
-    str(low52)
-)
+<div class="summary-item">
+<span>Open</span>
+<span>{{open}}</span>
+</div>
 
-html = html.replace(
-    "{{volatility}}",
-    str(volatility)
-)
+<div class="summary-item">
+<span>High</span>
+<span class="green">{{high}}</span>
+</div>
 
-html = html.replace(
-    "{{signal}}",
-    latest_signal
-)
+<div class="summary-item">
+<span>Low</span>
+<span>{{low}}</span>
+</div>
 
-html = html.replace(
-    "{{sentiment_score}}",
-    str(sentiment_score)
-)
+<div class="summary-item">
+<span>Close</span>
+<span>{{close}}</span>
+</div>
 
-# =========================================================
-# REPLACE CHART DATA
-# =========================================================
+<div class="summary-item">
+<span>52W High</span>
+<span class="green">{{high52}}</span>
+</div>
 
-html = html.replace(
-    "{{labels}}",
-    json.dumps(labels)
-)
+<div class="summary-item">
+<span>52W Low</span>
+<span class="red">{{low52}}</span>
+</div>
 
-html = html.replace(
-    "{{close_data}}",
-    json.dumps(close_data)
-)
+</div>
 
-html = html.replace(
-    "{{ma7_data}}",
-    json.dumps(ma7_data)
-)
+<!-- SENTIMENT -->
 
-html = html.replace(
-    "{{ma30_data}}",
-    json.dumps(ma30_data)
-)
+<div class="card-custom sentiment-box">
 
-html = html.replace(
-    "{{volume_data}}",
-    json.dumps(volume_data)
-)
+<h5 class="mb-3">
+Indikator Sentimen
+</h5>
 
-html = html.replace(
-    "{{volatility_data}}",
-    json.dumps(volatility_data)
-)
+<div class="gauge-wrapper">
 
-html = html.replace(
-    "{{forecast_labels}}",
-    json.dumps(forecast_labels)
-)
+<div class="gauge-half">
 
-html = html.replace(
-    "{{forecast_data}}",
-    json.dumps(forecast_values)
-)
+<div class="gauge-fill"></div>
 
-# =========================================================
-# DISPLAY DASHBOARD
-# =========================================================
+<div class="gauge-mask"></div>
 
-components.html(
+<div class="needle" id="needle"></div>
 
-    html,
+</div>
 
-    height=1050,
+<div class="gauge-labels">
 
-    scrolling=False
-)
+<span>-100</span>
+
+<span>0</span>
+
+<span>100</span>
+
+</div>
+
+<div class="gauge-info">
+
+<h3 id="signalText">
+{{signal}}
+</h3>
+
+<p>
+{{sentiment_score}} / 100
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- VOLATILITY -->
+
+<div class="card-custom">
+
+<h5>
+Volatilitas (30 Hari)
+</h5>
+
+<div class="big-number mt-2">
+{{volatility}}
+</div>
+
+<div class="mini-chart mt-3">
+
+<canvas id="miniChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- SOURCE -->
+
+<div class="card-custom">
+
+<h5 class="mb-3">
+Sumber Data
+</h5>
+
+<div class="row align-items-center">
+
+    <!-- LEFT -->
+    <div class="col-6">
+
+        <div class="d-flex align-items-center gap-2">
+
+            <span class="green">
+            <i class="fa-solid fa-database"></i>
+            </span>
+
+            <div>
+
+                <div>
+                yfinance
+                </div>
+
+                <small class="gray">
+                Realtime
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-6">
+
+<div class="project-mini">
+
+    <h6>
+    VINIX7
+    </h6>
+
+    <div class="project-subtitle">
+    FINAL PROJECT BATCH 4
+    </div>
+
+    <div class="project-group">
+    KELOMPOK 12
+    </div>
+
+    <ul class="member-list">
+
+        <li>Sahira Anindya</li>
+        <li>Agus Purnawan</li>
+        <li>Muhammad Sultan</li>
+
+    </ul>
+
+</div>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SIGNAL COLOR
+========================= */
+
+const signalText = document.getElementById('signalText');
+
+if(signalText.innerText === 'BUY'){
+
+    signalText.style.color = '#22c55e';
+
+}else{
+
+    signalText.style.color = '#ef4444';
+
+}
+
+/* =========================
+   PRICE CHART
+========================= */
+
+const priceChart = document.getElementById('priceChart');
+
+new Chart(priceChart, {
+
+    type:'line',
+
+    data:{
+
+        labels: {{labels}},
+
+        datasets:[
+
+            {
+                label:'Harga',
+
+                data: {{close_data}},
+
+                borderColor:'#22c55e',
+
+                tension:0.4,
+
+                borderWidth:2,
+
+                pointRadius:0
+            },
+
+{
+    label:'MA7',
+
+    data: {{ma7_data}},
+
+    borderColor:'#3b82f6',
+
+    tension:0.4,
+
+    borderWidth:2,
+
+    pointRadius:0,
+
+    spanGaps:true
+},
+
+{
+    label:'MA30',
+
+    data: {{ma30_data}},
+
+    borderColor:'#f59e0b',
+
+    tension:0.4,
+
+    borderWidth:2,
+
+    pointRadius:0,
+
+    spanGaps:true
+}
+
+        ]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
+                }
+            }
+        },
+
+        scales:{
+
+            x:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            },
+
+            y:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+/* =========================
+   VOLUME CHART
+========================= */
+
+const volumeChart = document.getElementById('volumeChart');
+
+new Chart(volumeChart, {
+
+    type:'bar',
+
+    data:{
+
+        labels: {{labels}},
+
+        datasets:[{
+
+            data: {{volume_data}},
+
+            backgroundColor:'#06b6d4',
+
+            borderRadius:4
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+
+        scales:{
+
+            x:{
+                display:false
+            },
+
+            y:{
+                display:false
+            }
+
+        }
+
+    }
+
+});
+
+/* =========================
+   FORECAST CHART
+========================= */
+
+const forecastChart =
+document.getElementById('forecastChart');
+
+new Chart(forecastChart, {
+
+    type:'line',
+
+    data:{
+
+        labels: {{forecast_labels}},
+
+        datasets:[{
+
+            label:'Forecast 30 Hari',
+
+            data: {{forecast_data}},
+
+            borderColor:'#f59e0b',
+
+            backgroundColor:'rgba(245,158,11,0.15)',
+
+            fill:true,
+
+            tension:0.4,
+
+            borderWidth:3,
+
+            pointRadius:0
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
+                }
+            }
+        },
+
+        scales:{
+
+            x:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            },
+
+            y:{
+                ticks:{
+                    color:'#cbd5e1'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.05)'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+/* =========================
+   VOLATILITY MINI CHART
+========================= */
+
+const miniChart = document.getElementById('miniChart');
+
+new Chart(miniChart, {
+
+    type:'line',
+
+    data:{
+
+        labels: {{labels}},
+
+        datasets:[{
+
+            data: {{volatility_data}},
+
+            borderColor:'#22c55e',
+
+            borderWidth:2,
+
+            tension:0.4,
+
+            pointRadius:0,
+
+            fill:false
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+
+        scales:{
+
+            x:{
+                display:false
+            },
+
+            y:{
+                display:false
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+
+</body>
+</html>
