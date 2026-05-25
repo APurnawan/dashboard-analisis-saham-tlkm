@@ -38,6 +38,7 @@ body{
     color:white;
 
     padding:14px;
+    padding-bottom:50px;
 
     overflow-y:auto;
 }
@@ -167,21 +168,21 @@ body{
 .chart-container{
     position:relative;
     width:100%;
-    height:260px;
+    height:250px;
 }
 
 .volume-container{
     position:relative;
     width:100%;
-    height:110px;
+    height:100px;
 }
 
 .forecast-container{
     position:relative;
     width:100%;
-    height:210px;
+    height:170px;
 
-    padding-bottom:10px;
+    padding-bottom:5px;
 }
 
 canvas{
@@ -207,6 +208,10 @@ canvas{
     display:flex;
     flex-direction:column;
     gap:14px;
+}
+
+.col-lg-9{
+    margin-bottom:14px;
 }
 
 /* =========================
@@ -329,6 +334,8 @@ canvas{
     display:flex;
     flex-direction:column;
     gap:18px;
+
+    min-height:420px;
 }
 
 .source-header{
@@ -487,11 +494,15 @@ canvas{
     }
 
     .chart-container{
-        height:240px;
+        height:230px;
     }
 
     .forecast-container{
-        height:200px;
+        height:180px;
+    }
+
+    .source-card{
+        min-height:auto;
     }
 
 }
@@ -521,11 +532,11 @@ canvas{
     }
 
     .chart-container{
-        height:220px;
+        height:210px;
     }
 
     .forecast-container{
-        height:190px;
+        height:170px;
     }
 
 }
