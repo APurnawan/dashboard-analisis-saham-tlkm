@@ -309,49 +309,80 @@ else:
 # PROPHET FORECAST
 # =========================================================
 
-forecast_df = df[['Date', 'Close']].copy()
+try:
 
-# rename kolom
-forecast_df.columns = ['ds', 'y']
+    forecast_df = df[['Date', 'Close']].copy()
 
-# hapus timezone
-forecast_df['ds'] = (
-    pd.to_datetime(
-        forecast_df['ds']
-    ).dt.tz_localize(None)
-)
+    forecast_df.columns = ['ds', 'y']
 
-# pastikan numeric
-forecast_df['y'] = pd.to_numeric(
-    forecast_df['y'],
-    errors='coerce'
-)
+    # hapus timezone
+    forecast_df['ds'] = (
+        pd.to_datetime(
+            forecast_df['ds']
+        ).dt.tz_localize(None)
+    )
 
-# hapus NaN
-forecast_df = forecast_df.dropna()
+    # numeric
+    forecast_df['y'] = pd.to_numeric(
+        forecast_df['y'],
+        errors='coerce'
+    )
 
-# reset index
-forecast_df = forecast_df.reset_index(drop=True)
+    # hapus NaN
+    forecast_df = forecast_df.dropna()
 
-# model prophet
-model = Prophet(
+    # reset index
+    forecast_df = (
+        forecast_df
+        .reset_index(drop=True)
+    )
 
-    daily_seasonality=True,
+    # prophet model
+    model = Prophet(
 
-    yearly_seasonality=True
+        daily_seasonality=True,
 
-)
+        yearly_seasonality=True
 
-model.fit(forecast_df)
+    )
 
-# future dataframe
-future = model.make_future_dataframe(
-    periods=30
-)
+    model.fit(forecast_df)
 
-forecast = model.predict(future)
+    # future
+    future = model.make_future_dataframe(
+        periods=30
+    )
 
-forecast_future = forecast.tail(30)
+    forecast = model.predict(future)
+
+    forecast_future = forecast.tail(30)
+
+    forecast_labels = (
+
+        forecast_future['ds']
+        .dt.strftime('%d %b')
+        .tolist()
+
+    )
+
+    forecast_values = (
+
+        forecast_future['yhat']
+        .round(2)
+        .tolist()
+
+    )
+
+except Exception as e:
+
+    st.warning(
+        f"Forecast gagal dibuat: {e}"
+    )
+
+    # fallback agar dashboard tidak crash
+    forecast_labels = []
+
+    forecast_values = []
 # =========================================================
 # CHART DATA
 # =========================================================
