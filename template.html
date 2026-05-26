@@ -1052,9 +1052,16 @@ new Chart(priceChart, {
 
                     maxTicksLimit:8,
 
-                    maxRotation:45,
+                    maxRotation:0,
 
-                    minRotation:45
+                    minRotation:0
+                   
+                    callback:function(value){
+
+                    return this.getLabelForValue(value)
+                        
+                    .split('\n');
+                        }
                      },
 
                 grid:{
