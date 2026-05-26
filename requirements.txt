@@ -1,5 +1,9 @@
 streamlit
+streamlit-autorefresh
 yfinance
 pandas
-plotly
 numpy
+plotly
+prophet
+scikit-learn
+matplotlib
