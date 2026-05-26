@@ -360,7 +360,7 @@ try:
     forecast_labels = (
 
         forecast_future['ds']
-        .dt.strftime('%d %b')
+        .dt.strftime('%d %b\n%H:%M')
         .tolist()
 
     )
@@ -577,11 +577,7 @@ components.html(
 # FOOTER
 # =========================================================
 
-last_update = (
-    df['Date']
-    .iloc[-1]
-    .strftime('%d %B %Y %H:%M')
-)
+last_update = str(df['Date'].iloc[-1])
 
 st.markdown(
 
