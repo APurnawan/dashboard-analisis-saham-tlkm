@@ -311,8 +311,29 @@ else:
 
 forecast_df = df[['Date', 'Close']].copy()
 
+# rename kolom
 forecast_df.columns = ['ds', 'y']
 
+# hapus timezone
+forecast_df['ds'] = (
+    pd.to_datetime(
+        forecast_df['ds']
+    ).dt.tz_localize(None)
+)
+
+# pastikan numeric
+forecast_df['y'] = pd.to_numeric(
+    forecast_df['y'],
+    errors='coerce'
+)
+
+# hapus NaN
+forecast_df = forecast_df.dropna()
+
+# reset index
+forecast_df = forecast_df.reset_index(drop=True)
+
+# model prophet
 model = Prophet(
 
     daily_seasonality=True,
@@ -323,6 +344,7 @@ model = Prophet(
 
 model.fit(forecast_df)
 
+# future dataframe
 future = model.make_future_dataframe(
     periods=30
 )
@@ -330,19 +352,6 @@ future = model.make_future_dataframe(
 forecast = model.predict(future)
 
 forecast_future = forecast.tail(30)
-
-forecast_labels = (
-    forecast_future['ds']
-    .dt.strftime('%d %b')
-    .tolist()
-)
-
-forecast_values = (
-    forecast_future['yhat']
-    .round(2)
-    .tolist()
-)
-
 # =========================================================
 # CHART DATA
 # =========================================================
