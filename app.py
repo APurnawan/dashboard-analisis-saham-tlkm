@@ -426,14 +426,13 @@ volume_data = (
 
 )
 
-volatility_data = (
+volatility_data = [
 
-    df['Volatility']
-    .fillna(0)
-    .round(4)
-    .tolist()
+    None if pd.isna(x)
+    else round(x,4)
 
-)
+    for x in df['Volatility']
+]
 
 # =========================================================
 # LOAD HTML TEMPLATE
