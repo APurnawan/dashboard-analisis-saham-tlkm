@@ -1058,8 +1058,9 @@ new Chart(priceChart, {
                    
                     callback:function(value){
 
-                    return this.getLabelForValue(value)
-                        
+                    return this.getLabelForValue(value){
+
+                     return this.getLabelForValue(value)   
                     .split('\n');
                         }
                      },
@@ -1196,15 +1197,17 @@ new Chart(forecastChart, {
 
                maxTicksLimit:8,
 
-               maxRotation:45,
+               maxRotation:0,
 
-               minRotation:45
-                },
+               minRotation:0
+                
+               callback:function(value){
 
-                grid:{
-                    color:'rgba(255,255,255,0.05)'
-                }
-            },
+               return this.getLabelForValue(value)
+                   
+               .split('\n');
+        }
+    },
 
             y:{
                 ticks:{
