@@ -577,36 +577,17 @@ components.html(
 # FOOTER
 # =========================================================
 
-last_update = str(df['Date'].iloc[-1])
-
-st.markdown(
+st.caption(
 
     f"""
-    <div style="
-        padding:10px;
-        margin-top:10px;
-        border-radius:12px;
-        background:rgba(255,255,255,0.03);
-        color:#94a3b8;
-        font-size:13px;
-        text-align:center;
-    ">
-
     Last Update :
-    <b>{last_update}</b>
+    {df['Date'].iloc[-1]}
 
-    &nbsp;&nbsp;|&nbsp;&nbsp;
+    | Data Source :
+    Yahoo Finance
 
-    Data Source :
-    <b>Yahoo Finance</b>
+    | Interval :
+    {interval}
+    """
 
-    &nbsp;&nbsp;|&nbsp;&nbsp;
-
-    Interval :
-    <b>{interval}</b>
-
-    </div>
-    """,
-
-    unsafe_allow_html=True
 )
