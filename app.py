@@ -357,13 +357,13 @@ try:
 
     forecast_future = forecast.tail(30)
 
-    forecast_labels = (
+labels = (
 
-        forecast_future['ds']
-        .dt.strftime('%d %b')
-        .tolist()
+    df['Date']
+    .dt.strftime('%d %b\n%H:%M')
+    .tolist()
 
-    )
+)
 
     forecast_values = (
 
