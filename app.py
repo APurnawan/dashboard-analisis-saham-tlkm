@@ -390,7 +390,7 @@ except Exception as e:
 labels = (
 
     df['Date']
-    .dt.strftime('%d %b %H:%M')
+    .dt.strftime('%d %b\n%H:%M')
     .tolist()
 
 )
