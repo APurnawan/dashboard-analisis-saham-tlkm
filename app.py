@@ -1,9 +1,13 @@
 import streamlit as st
 import streamlit.components.v1 as components
+from streamlit_autorefresh import st_autorefresh
+
 import yfinance as yf
 import pandas as pd
 import numpy as np
 import json
+
+from prophet import Prophet
 
 # =========================================================
 # PAGE CONFIG
@@ -15,8 +19,24 @@ st.set_page_config(
 )
 
 # =========================================================
-# PERIOD SELECTOR
+# AUTO REFRESH
 # =========================================================
+
+st_autorefresh(
+    interval=60000,
+    key="refresh"
+)
+
+# =========================================================
+# TITLE
+# =========================================================
+
+st.title("Realtime Dashboard Analisis Saham TLKM")
+
+st.caption(
+    "Realtime Market Data • Auto Refresh 1 Menit"
+)
+
 # =========================================================
 # PERIOD SELECTOR
 # =========================================================
@@ -26,54 +46,79 @@ period_option = st.selectbox(
     "Pilih Periode",
 
     [
+        "7 Hari",
         "1 Bulan",
-        "3 Bulan",
         "6 Bulan",
         "1 Tahun",
         "2 Tahun",
-        "5 Tahun",
+        "6 Tahun",
         "10 Tahun",
         "Max"
     ]
 
 )
 
-period_map = {
-
-    "1 Bulan":"1mo",
-
-    "3 Bulan":"3mo",
-
-    "6 Bulan":"6mo",
-
-    "1 Tahun":"1y",
-
-    "2 Tahun":"2y",
-
-    "5 Tahun":"5y",
-
-    "10 Tahun":"10y",
-
-    "Max":"max"
-
-}
-
-selected_period = period_map[period_option]
-
 # =========================================================
-# LOAD DATA
+# PERIOD MAP
 # =========================================================
 
-df = yf.download(
+if period_option == "7 Hari":
 
-    'TLKM.JK',
+    period = "7d"
+    interval = "5m"
 
-    period=selected_period,
+elif period_option == "1 Bulan":
 
-    auto_adjust=True,
+    period = "1mo"
+    interval = "30m"
 
-    progress=False
-)
+elif period_option == "6 Bulan":
+
+    period = "6mo"
+    interval = "1d"
+
+elif period_option == "1 Tahun":
+
+    period = "1y"
+    interval = "1d"
+
+elif period_option == "2 Tahun":
+
+    period = "2y"
+    interval = "1d"
+
+elif period_option == "6 Tahun":
+
+    period = "6y"
+    interval = "1wk"
+
+elif period_option == "10 Tahun":
+
+    period = "10y"
+    interval = "1wk"
+
+else:
+
+    period = "max"
+    interval = "1mo"
+# =========================================================
+# LOAD DATA REALTIME
+# =========================================================
+
+with st.spinner("Mengambil data realtime..."):
+
+    df = yf.download(
+
+        "TLKM.JK",
+
+        period=period,
+
+        interval=interval,
+
+        auto_adjust=True,
+
+        progress=False
+    )
 
 # =========================================================
 # FIX DATAFRAME
@@ -91,28 +136,80 @@ df.rename(
 )
 
 # =========================================================
+# HANDLE EMPTY DATA
+# =========================================================
+
+if len(df) < 30:
+
+    st.error("Data tidak cukup untuk analisis")
+    st.stop()
+
+# =========================================================
 # FEATURE ENGINEERING
 # =========================================================
 
-# Return saham
 df['Return'] = df['Close'].pct_change()
 
-# Moving Average
 df['MA7'] = df['Close'].rolling(7).mean()
 
 df['MA30'] = df['Close'].rolling(30).mean()
 
-# Volatility
-window_size = min(30, len(df))
-
 df['Volatility'] = (
     df['Return']
-    .rolling(window_size)
+    .rolling(30)
     .std()
 )
 
 # =========================================================
-# METRIC ANALYSIS
+# RSI
+# =========================================================
+
+delta = df['Close'].diff()
+
+gain = (
+    delta
+    .where(delta > 0, 0)
+)
+
+loss = (
+    -delta
+    .where(delta < 0, 0)
+)
+
+avg_gain = gain.rolling(14).mean()
+
+avg_loss = loss.rolling(14).mean()
+
+rs = avg_gain / avg_loss
+
+df['RSI'] = 100 - (
+    100 / (1 + rs)
+)
+
+# =========================================================
+# MACD
+# =========================================================
+
+exp1 = df['Close'].ewm(
+    span=12,
+    adjust=False
+).mean()
+
+exp2 = df['Close'].ewm(
+    span=26,
+    adjust=False
+).mean()
+
+df['MACD'] = exp1 - exp2
+
+df['Signal_Line'] = (
+    df['MACD']
+    .ewm(span=9, adjust=False)
+    .mean()
+)
+
+# =========================================================
+# LAST DATA
 # =========================================================
 
 last_close = round(
@@ -120,37 +217,37 @@ last_close = round(
     2
 )
 
-first_close = round(
-    df['Close'].iloc[0],
+prev_close = round(
+    df['Close'].iloc[-2],
     2
 )
 
 change_value = round(
-    last_close-first_close,
+    last_close - prev_close,
     2
 )
 
 pct = round(
-    (change_value/first_close)*100,
+    (change_value / prev_close) * 100,
     2
 )
 
 change = f"{change_value} ({pct}%)"
 
-volume = int(df['Volume'].sum())
+volume = int(df['Volume'].iloc[-1])
 
 open_price = round(
-    df['Open'].iloc[0],
+    df['Open'].iloc[-1],
     2
 )
 
 high_price = round(
-    df['High'].max(),
+    df['High'].iloc[-1],
     2
 )
 
 low_price = round(
-    df['Low'].min(),
+    df['Low'].iloc[-1],
     2
 )
 
@@ -170,86 +267,98 @@ low52 = round(
 )
 
 # =========================================================
-# VOLATILITY VALUE
+# VOLATILITY
 # =========================================================
 
-if pd.isna(df['Volatility'].iloc[-1]):
-
-    volatility = 0
-
-else:
-
-    volatility = round(
-        df['Volatility'].iloc[-1],
-        4
-    )
+volatility = round(
+    df['Volatility'].iloc[-1],
+    4
+)
 
 # =========================================================
 # SIGNAL ANALYSIS
 # =========================================================
 
-if df['MA7'].iloc[-1] > df['MA30'].iloc[-1]:
+latest_rsi = df['RSI'].iloc[-1]
+
+latest_macd = df['MACD'].iloc[-1]
+
+latest_signal_line = df['Signal_Line'].iloc[-1]
+
+if (
+
+    latest_rsi > 50
+
+    and
+
+    latest_macd > latest_signal_line
+
+):
 
     latest_signal = "BULLISH"
 
-    sentiment_score = 78
+    sentiment_score = 82
 
 else:
 
     latest_signal = "BEARISH"
 
-    sentiment_score = 25
-    
-    
+    sentiment_score = 34
+
 # =========================================================
-# FORECAST DATA
+# PROPHET FORECAST
 # =========================================================
 
-future_days = 30
+forecast_df = df[['Date', 'Close']].copy()
 
-last_price_forecast = df['Close'].iloc[-1]
+forecast_df.columns = ['ds', 'y']
 
-forecast_values = []
+model = Prophet(
 
-for i in range(future_days):
+    daily_seasonality=True,
 
-    next_price = (
-        last_price_forecast
-        + (i * 5)
-        + np.random.normal(0,10)
-    )
+    yearly_seasonality=True
 
-    forecast_values.append(
-        round(next_price,2)
-    )
-
-future_dates = pd.date_range(
-
-    start=df['Date'].iloc[-1],
-
-    periods=future_days
 )
 
-forecast_labels = (
+model.fit(forecast_df)
 
-    future_dates
-    .strftime('%d %b')
+future = model.make_future_dataframe(
+    periods=30
+)
+
+forecast = model.predict(future)
+
+forecast_future = forecast.tail(30)
+
+forecast_labels = (
+    forecast_future['ds']
+    .dt.strftime('%d %b')
     .tolist()
-)    
+)
+
+forecast_values = (
+    forecast_future['yhat']
+    .round(2)
+    .tolist()
+)
 
 # =========================================================
 # CHART DATA
 # =========================================================
 
 labels = (
+
     df['Date']
-    .dt.strftime('%b %y')
+    .dt.strftime('%d %b %H:%M')
     .tolist()
+
 )
 
 close_data = (
     df['Close']
     .fillna(0)
+    .round(2)
     .tolist()
 )
 
@@ -270,15 +379,20 @@ ma30_data = [
 ]
 
 volume_data = (
+
     df['Volume']
     .fillna(0)
     .tolist()
+
 )
 
 volatility_data = (
+
     df['Volatility']
     .fillna(0)
+    .round(4)
     .tolist()
+
 )
 
 # =========================================================
@@ -299,12 +413,12 @@ with open(
 
 html = html.replace(
     "{{last_close}}",
-    str(last_close)
+    f"Rp {last_close:,.0f}"
 )
 
 html = html.replace(
     "{{pct}}",
-    str(pct)+"%"
+    f"{pct}%"
 )
 
 html = html.replace(
@@ -414,7 +528,27 @@ components.html(
 
     html,
 
-    height=1050,
+    height=1200,
 
-    scrolling=False
+    scrolling=True
+
+)
+
+# =========================================================
+# FOOTER
+# =========================================================
+
+st.caption(
+
+    f"""
+    Last Update :
+    {df['Date'].iloc[-1]}
+
+    | Data Source :
+    Yahoo Finance
+
+    | Interval :
+    {interval}
+    """
+
 )
