@@ -952,7 +952,7 @@ Volatilitas (30 Hari)
 
 const signalText = document.getElementById('signalText');
 
-if(signalText.innerText === 'BUY'){
+if(signalText.innerText === 'BULLISH'){
 
     signalText.style.color = '#22c55e';
 
@@ -1256,6 +1256,20 @@ new Chart(miniChart, {
 
 });
 
+/* =========================
+   GAUGE NEEDLE
+========================= */
+
+const score = {{sentiment_score}};
+
+const needle =
+document.getElementById('needle');
+
+const rotation =
+(score / 100) * 180 - 90;
+
+needle.style.transform =
+`rotate(${rotation}deg)`;
 </script>
 
 
