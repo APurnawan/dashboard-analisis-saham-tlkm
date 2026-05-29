@@ -525,7 +525,38 @@ html = html.replace(
     "{{sentiment_score}}",
     str(sentiment_score)
 )
+# =================================
+# EVALUASI MODEL
+# =================================
 
+mae = round(mae, 2)
+rmse = round(rmse, 2)
+mape = round(mape, 2)
+
+accuracy = round(
+    100 - mape,
+    2
+)
+
+html = html.replace(
+    "{{mae}}",
+    str(mae)
+)
+
+html = html.replace(
+    "{{rmse}}",
+    str(rmse)
+)
+
+html = html.replace(
+    "{{mape}}",
+    str(mape)
+)
+
+html = html.replace(
+    "{{accuracy}}",
+    str(accuracy)
+)
 # =========================================================
 # REPLACE CHART DATA
 # =========================================================
