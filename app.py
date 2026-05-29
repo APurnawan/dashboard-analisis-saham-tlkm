@@ -9,6 +9,11 @@ import json
 
 from prophet import Prophet
 
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error
+)
+
 # =========================================================
 # PAGE CONFIG
 # =========================================================
@@ -357,6 +362,36 @@ try:
 
     forecast_future = forecast.tail(30)
 
+    forecast = model.predict(future)
+
+# ==========================================
+# EVALUASI MODEL
+# ==========================================
+
+actual = forecast_df['y']
+
+predicted = forecast['yhat'].iloc[:len(actual)]
+
+mae = mean_absolute_error(
+    actual,
+    predicted
+)
+
+rmse = np.sqrt(
+    mean_squared_error(
+        actual,
+        predicted
+    )
+)
+
+mape = np.mean(
+    np.abs(
+        (actual - predicted)
+        / actual
+    )
+) * 100
+
+forecast_future = forecast.tail(30)
     forecast_labels = (
 
         forecast_future['ds']
