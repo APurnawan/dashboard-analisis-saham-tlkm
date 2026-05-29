@@ -741,7 +741,77 @@ Pergerakan Harga Saham
         <canvas id="forecastChart"></canvas>
 
     </div>
+ <!-- EVALUASI MODEL -->
 
+    <div class="row mt-4">
+
+        <div class="col-md-3">
+
+            <div class="text-center">
+
+                <div class="card-title-small">
+                    MAE
+                </div>
+
+                <h4>
+                    {{mae}}
+                </h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="text-center">
+
+                <div class="card-title-small">
+                    RMSE
+                </div>
+
+                <h4>
+                    {{rmse}}
+                </h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="text-center">
+
+                <div class="card-title-small">
+                    MAPE
+                </div>
+
+                <h4>
+                    {{mape}}%
+                </h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="text-center">
+
+                <div class="card-title-small">
+                    Akurasi
+                </div>
+
+                <h4 class="green">
+                    {{accuracy}}%
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 </div>
 
 </div>
