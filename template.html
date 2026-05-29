@@ -730,80 +730,39 @@ Pergerakan Harga Saham
 
 <!-- FORECAST -->
 
-<div class="card-custom forecast-box">
+ <div class="col-12">
 
-    <h6 class="mb-3">
-    Forecast 30 Hari
-    </h6>
+        <div class="card-custom forecast-box">
 
-    <div class="forecast-container">
+            <h6 class="mb-3">
+                Forecast 30 Hari
+            </h6>
 
-        <canvas id="forecastChart"></canvas>
-
-    </div>
- <!-- EVALUASI MODEL -->
-
-    <div class="row mt-4">
-
-        <div class="col-md-3">
-
-            <div class="text-center">
-
-                <div class="card-title-small">
-                    MAE
-                </div>
-
-                <h4>
-                    {{mae}}
-                </h4>
-
+            <div class="forecast-container">
+                <canvas id="forecastChart"></canvas>
             </div>
 
-        </div>
+            <div class="row text-center mt-4">
 
-        <div class="col-md-3">
-
-            <div class="text-center">
-
-                <div class="card-title-small">
-                    RMSE
+                <div class="col-3">
+                    <div class="card-title-small">MAE</div>
+                    <h5>{{mae}}</h5>
                 </div>
 
-                <h4>
-                    {{rmse}}
-                </h4>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="text-center">
-
-                <div class="card-title-small">
-                    MAPE
+                <div class="col-3">
+                    <div class="card-title-small">RMSE</div>
+                    <h5>{{rmse}}</h5>
                 </div>
 
-                <h4>
-                    {{mape}}%
-                </h4>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="text-center">
-
-                <div class="card-title-small">
-                    Akurasi
+                <div class="col-3">
+                    <div class="card-title-small">MAPE</div>
+                    <h5>{{mape}}%</h5>
                 </div>
 
-                <h4 class="green">
-                    {{accuracy}}%
-                </h4>
+                <div class="col-3">
+                    <div class="card-title-small">ACC</div>
+                    <h5 class="green">{{accuracy}}%</h5>
+                </div>
 
             </div>
 
@@ -811,7 +770,6 @@ Pergerakan Harga Saham
 
     </div>
 
-</div>
 </div>
 
 <!-- RIGHT -->
