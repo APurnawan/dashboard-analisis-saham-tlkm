@@ -313,99 +313,77 @@ else:
 # =========================================================
 # PROPHET FORECAST
 # =========================================================
-
 try:
 
     forecast_df = df[['Date', 'Close']].copy()
-
     forecast_df.columns = ['ds', 'y']
 
-    # hapus timezone
     forecast_df['ds'] = (
         pd.to_datetime(
             forecast_df['ds']
         ).dt.tz_localize(None)
     )
 
-    # numeric
     forecast_df['y'] = pd.to_numeric(
         forecast_df['y'],
         errors='coerce'
     )
 
-    # hapus NaN
     forecast_df = forecast_df.dropna()
+    forecast_df = forecast_df.reset_index(drop=True)
 
-    # reset index
-    forecast_df = (
-        forecast_df
-        .reset_index(drop=True)
-    )
-
-    # prophet model
     model = Prophet(
-
         daily_seasonality=True,
-
         yearly_seasonality=True
-
     )
 
     model.fit(forecast_df)
 
-    # future
     future = model.make_future_dataframe(
         periods=30
     )
 
     forecast = model.predict(future)
 
-    forecast_future = forecast.tail(30)
+    # ==========================================
+    # EVALUASI MODEL
+    # ==========================================
 
-    forecast = model.predict(future)
+    actual = forecast_df['y']
 
-# ==========================================
-# EVALUASI MODEL
-# ==========================================
+    predicted = forecast['yhat'].iloc[:len(actual)]
 
-actual = forecast_df['y']
-
-predicted = forecast['yhat'].iloc[:len(actual)]
-
-mae = mean_absolute_error(
-    actual,
-    predicted
-)
-
-rmse = np.sqrt(
-    mean_squared_error(
+    mae = mean_absolute_error(
         actual,
         predicted
     )
-)
 
-mape = np.mean(
-    np.abs(
-        (actual - predicted)
-        / actual
+    rmse = np.sqrt(
+        mean_squared_error(
+            actual,
+            predicted
+        )
     )
-) * 100
 
-forecast_future = forecast.tail(30)
+    mape = np.mean(
+        np.abs(
+            (actual - predicted)
+            / actual
+        )
+    ) * 100
+
+    forecast_future = forecast.tail(30)
+
     forecast_labels = (
-
         forecast_future['ds']
-        .dt.strftime('%d %b\n%H:%M')
+        .dt.strftime('%d %b')
         .tolist()
-
     )
 
     forecast_values = (
-
         forecast_future['yhat']
         .round(2)
         .tolist()
-
     )
 
 except Exception as e:
@@ -414,9 +392,7 @@ except Exception as e:
         f"Forecast gagal dibuat: {e}"
     )
 
-    # fallback agar dashboard tidak crash
     forecast_labels = []
-
     forecast_values = []
 # =========================================================
 # CHART DATA
