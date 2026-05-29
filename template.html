@@ -619,159 +619,115 @@ Realtime Market Dashboard
 
 </div>
 
+```html
 <!-- CONTENT -->
+<div class="row">
 
-<div class="row g-3">
+    <!-- LEFT SIDE -->
+    <div class="col-lg-9">
 
-<!-- LEFT -->
+        <!-- TOP CARDS -->
+        <div class="row g-3 mb-3">
 
-<div class="col-lg-9">
+            <div class="col-md-4">
+                <div class="card-custom">
+                    <div class="card-title-small">Harga Terakhir</div>
+                    <div class="big-number">{{last_close}}</div>
+                    <div class="red mt-2">{{change}}</div>
+                </div>
+            </div>
 
-<!-- TOP CARDS -->
+            <div class="col-md-4">
+                <div class="card-custom">
+                    <div class="card-title-small">Perubahan Hari Ini</div>
+                    <div class="big-number green">{{pct}}</div>
+                    <div class="green mt-2">{{change}}</div>
+                </div>
+            </div>
 
-<div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <div class="card-custom">
+                    <div class="card-title-small">Volume</div>
+                    <div class="big-number">{{volume}}</div>
+                    <div class="gray mt-2">Saham</div>
+                </div>
+            </div>
 
-<!-- HARGA -->
-
-<div class="col-md-4">
-
-<div class="card-custom">
-
-<div class="card-title-small">
-Harga Terakhir
-</div>
-
-<div class="big-number">
-{{last_close}}
-</div>
-
-<div class="red mt-2">
-{{change}}
-</div>
-
-</div>
-
-</div>
-
-<!-- PERSENTASE -->
-
-<div class="col-md-4">
-
-<div class="card-custom">
-
-<div class="card-title-small">
-Perubahan Hari Ini
-</div>
-
-<div class="big-number green">
-{{pct}}
-</div>
-
-<div class="green mt-2">
-{{change}}
-</div>
-
-</div>
-
-</div>
-
-<!-- VOLUME -->
-
-<div class="col-md-4">
-
-<div class="card-custom">
-
-<div class="card-title-small">
-Volume
-</div>
-
-<div class="big-number">
-{{volume}}
-</div>
-
-<div class="gray mt-2">
-Saham
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PRICE CHART -->
-
-<div class="card-custom mb-3">
-
-<h5 class="mb-3">
-Pergerakan Harga Saham
-</h5>
-
-<div class="chart-container">
-
-<canvas id="priceChart"></canvas>
-
-</div>
-
-</div>
-
-<div class="row g-3">
-
-<!-- VOLUME -->
-
-<div class="card-custom mb-3">
-
-    <h6 class="mb-3">
-        Volume Trading
-    </h6>
-
-    <div class="volume-container">
-        <canvas id="volumeChart"></canvas>
-    </div>
-
-</div>
-
-<!-- FORECAST -->
-
-<div class="card-custom forecast-box">
-
-    <h6 class="mb-3">
-        Forecast 30 Hari
-    </h6>
-
-    <div class="forecast-container">
-        <canvas id="forecastChart"></canvas>
-    </div>
-
-    <hr style="border-color:rgba(255,255,255,0.1);">
-
-    <div class="row text-center">
-
-        <div class="col-3">
-            <div class="card-title-small">MAE</div>
-            <h5>{{mae}}</h5>
         </div>
 
-        <div class="col-3">
-            <div class="card-title-small">RMSE</div>
-            <h5>{{rmse}}</h5>
+        <!-- PRICE CHART -->
+        <div class="card-custom mb-3">
+
+            <h5 class="mb-3">
+                Pergerakan Harga Saham
+            </h5>
+
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+
         </div>
 
-        <div class="col-3">
-            <div class="card-title-small">MAPE</div>
-            <h5>{{mape}}%</h5>
+        <!-- VOLUME -->
+        <div class="card-custom mb-3">
+
+            <h6 class="mb-3">
+                Volume Trading
+            </h6>
+
+            <div class="volume-container">
+                <canvas id="volumeChart"></canvas>
+            </div>
+
         </div>
 
-        <div class="col-3">
-            <div class="card-title-small">ACC</div>
-            <h5 class="green">{{accuracy}}%</h5>
+        <!-- FORECAST -->
+        <div class="card-custom forecast-box">
+
+            <h6 class="mb-3">
+                Forecast 30 Hari
+            </h6>
+
+            <div class="forecast-container">
+                <canvas id="forecastChart"></canvas>
+            </div>
+
+            <hr>
+
+            <div class="row text-center">
+
+                <div class="col-3">
+                    <div class="card-title-small">MAE</div>
+                    <h5>{{mae}}</h5>
+                </div>
+
+                <div class="col-3">
+                    <div class="card-title-small">RMSE</div>
+                    <h5>{{rmse}}</h5>
+                </div>
+
+                <div class="col-3">
+                    <div class="card-title-small">MAPE</div>
+                    <h5>{{mape}}%</h5>
+                </div>
+
+                <div class="col-3">
+                    <div class="card-title-small">ACC</div>
+                    <h5 class="green">{{accuracy}}%</h5>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
-</div>
+    <!-- RIGHT SIDE -->
+    <div class="col-lg-3">
 
-</div> <!-- col-lg-9 --> 
+        <div class="right-side">
+```
+
 <!-- RIGHT -->
 
 <div class="col-lg-3">
