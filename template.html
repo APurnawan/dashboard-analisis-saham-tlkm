@@ -712,65 +712,59 @@ Pergerakan Harga Saham
 
 <div class="row g-3">
 
-<!-- VOLUME -->
-<div class="col-12">
+        <!-- VOLUME -->
+        <div class="card-custom mb-3">
 
-    <div class="card-custom mb-3">
+            <h6 class="mb-3">
+                Volume Trading
+            </h6>
 
-        <h6 class="mb-3">
-            Volume Trading
-        </h6>
+            <div class="volume-container">
+                <canvas id="volumeChart"></canvas>
+            </div>
 
-        <div class="volume-container">
-            <canvas id="volumeChart"></canvas>
+        </div>
+
+        <!-- FORECAST -->
+        <div class="card-custom forecast-box">
+
+            <h6 class="mb-3">
+                Forecast 30 Hari
+            </h6>
+
+            <div class="forecast-container">
+                <canvas id="forecastChart"></canvas>
+            </div>
+
+            <hr style="border-color:rgba(255,255,255,0.1);">
+
+            <div class="row text-center">
+
+                <div class="col-3">
+                    <div class="card-title-small">MAE</div>
+                    <h5>{{mae}}</h5>
+                </div>
+
+                <div class="col-3">
+                    <div class="card-title-small">RMSE</div>
+                    <h5>{{rmse}}</h5>
+                </div>
+
+                <div class="col-3">
+                    <div class="card-title-small">MAPE</div>
+                    <h5>{{mape}}%</h5>
+                </div>
+
+                <div class="col-3">
+                    <div class="card-title-small">ACC</div>
+                    <h5 class="green">{{accuracy}}%</h5>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
-
-</div>
-
-<div class="col-12">
-
-    <div class="card-custom forecast-box">
-
-        <h6 class="mb-3">
-            Forecast 30 Hari
-        </h6>
-
-        <div class="forecast-container">
-            <canvas id="forecastChart"></canvas>
-        </div>
-
-        <hr style="border-color:rgba(255,255,255,0.1);">
-
-        <div class="row text-center">
-
-            <div class="col-3">
-                <div class="card-title-small">MAE</div>
-                <h5>{{mae}}</h5>
-            </div>
-
-            <div class="col-3">
-                <div class="card-title-small">RMSE</div>
-                <h5>{{rmse}}</h5>
-            </div>
-
-            <div class="col-3">
-                <div class="card-title-small">MAPE</div>
-                <h5>{{mape}}%</h5>
-            </div>
-
-            <div class="col-3">
-                <div class="card-title-small">ACC</div>
-                <h5 class="green">{{accuracy}}%</h5>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
 <!-- RIGHT -->
 
 <div class="col-lg-3">
